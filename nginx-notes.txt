@@ -1,0 +1,19 @@
+Configuration summary
+  + using system PCRE library
+  + using system OpenSSL library
+  + md5: using OpenSSL library
+  + sha1: using OpenSSL library
+  + using system zlib library
+
+  nginx path prefix: "/etc/nginx/"
+  nginx binary file: "/usr/sbin/nginx"
+  nginx configuration prefix: "/etc/nginx//conf"
+  nginx configuration file: "/etc/nginx//conf/nginx.conf"
+  nginx pid file: "/var/run/nginx.pid"
+  nginx error log file: "/etc/nginx//logs/error.log"
+  nginx http access log file: "/etc/nginx//logs/access.log"
+  nginx http client request body temporary files: "client_body_temp"
+  nginx http proxy temporary files: "proxy_temp"
+  nginx http fastcgi temporary files: "fastcgi_temp"
+  nginx http uwsgi temporary files: "uwsgi_temp"
+  nginx http scgi temporary files: "scgi_temp"

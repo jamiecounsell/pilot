@@ -1,0 +1,11 @@
+.pyc
+/media/*
+/static/admin/*
+.ssh/
+.pip/
+.virtualenvs/
+.bashrc
+.bash_history
+.profile
+.cache/
+.bash_logout

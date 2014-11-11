@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  {% load staticfiles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.css'         %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'music/css/style.css'         %}">
+
+
+  <title>{{album.name}}</title>
+  <style type="text/css" media="screen">
+    form article label {
+      display: block;
+      margin: 5px;
+    }
+
+    form .submit {
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  {% block content %}{% endblock %}
+</body>
+</html>
