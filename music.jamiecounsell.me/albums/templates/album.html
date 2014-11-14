@@ -1,25 +1,65 @@
 {% extends "layout.html" %}
 {% block content %}
+{% load staticfiles %}
 
-<div class = "container">
-  <div class="jumbotron">
-  hi
+  <div id="album-art" class="row-fluid" style="background-image:url('{{album.background.url}}')">
+
+    <div id="social-top">
+      FB | TW | WAT
+    </div>
+    <div id="cover-art">
+
+      <img class="cover-art-photo" src="{{album.cover_art.url}}">
+    </div>
   </div>
-  wat
+  <div class="container">
+    <div id="album-detail" class="row-fluid">
+      <div id="track-info" class="col-md-4">
+        <h1>{{album.name}} {% if album.is_single %}<span class="single">[Single]</span>{% endif %}</h1>
+      
+        <p id="album-description">
+          {{album.description}}
+        </p>
 
+        <div id="payment-footer">
+          <button id="pay-button" class="btn .btn-default">Purchase Album ({{album.price_read}})</button>
+        </div>
+      </div>
+      <div id="track-listing" class="col-md-6">
+        <h1>Track Listing</h1>
+        <hr>
 
-</div>
+        {% for track in tracks %}
+          <h2 class="track-name">{{track.name}}</h2>
+          <div class="audio-player">
+            <audio controls preload="false" >
+              <source src="{{track.audio_file.url}}" type="audio/mp3">
+            </audio>
+          </div>
+          <br>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
-  <form action="/charge" method="post">
-    <article>
-      <label>
-        <span>Amount is $5.00</span>
-      </label>
-    </article>
+<script>
+  var handler = StripeCheckout.configure({
+    key: 'pk_test_gTkXGUlLBYUiQFIo1OodN5Tw',
+    image: '{{album.cover_art.url}}',
+    token: function(token) {
+      // Use the token to create the charge with a server-side script.
+      // You can access the token ID with `token.id`
+    }
+  });
 
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="{{ key }}"
-            data-description="A Flask Charge"
-            data-amount="500"></script>
-  </form>
+  document.getElementById('pay-button').addEventListener('click', function(e) {
+    // Open Checkout with further options
+    handler.open({
+      name: '{{album.name}}',
+      description: '{{album.name}} Digital Download',
+      amount: {% if album.price_incents %}{{album.price_incents}}{% else %}0{% endif %}
+    });
+    e.preventDefault();
+  });
+</script>
 {% endblock %}

@@ -6,18 +6,12 @@
   <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.css'         %}">
   <link rel="stylesheet" type="text/css" href="{% static 'music/css/style.css'         %}">
 
+  <script src="https://checkout.stripe.com/checkout.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>{{album.name}}</title>
-  <style type="text/css" media="screen">
-    form article label {
-      display: block;
-      margin: 5px;
-    }
 
-    form .submit {
-      margin: 15px 0;
-    }
-  </style>
 </head>
 <body>
   {% block content %}{% endblock %}

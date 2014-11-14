@@ -15,11 +15,15 @@ class Album(models.Model):
 
 	featured 	= ExclusiveBooleanField(default=False, verbose_name="Feature this Album.", help_text="Only one album can be featured at a time.")
 
-	price = models.DecimalField(max_digits=5, decimal_places=2)
+	price 		= models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Price ($)", help_text="Please enter a price. Dollars and cents can be used (ie. 4.99).")
 	
 	@property
-	def price(self):
-		return "$%s" % self.price
+	def price_incents(self):
+		return int(self.price * 100)
+
+	@property
+	def price_read(self):
+	    return ("$%2d" % self.price).replace(" ", "")
 
 	def readable_name(self):
 		return self.name
