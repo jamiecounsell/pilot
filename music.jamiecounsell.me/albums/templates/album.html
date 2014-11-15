@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 {% load staticfiles %}
+{% load albums_extras %}
 
   <div id="album-art" class="row-fluid" style="background-image:url('{{album.background.url}}')">
 
@@ -22,7 +23,7 @@
         </p>
 
         <div id="payment-footer">
-          <button id="pay-button" class="btn .btn-default">Purchase Album ({{album.price_read}})</button>
+          <button id="pay-button" class="payButton">Purchase Album ({{album.price_read}})</button>
         </div>
       </div>
       <div id="track-listing" class="col-md-6">
@@ -30,13 +31,15 @@
         <hr>
 
         {% for track in tracks %}
-          <h2 class="track-name">{{track.name}}</h2>
-          <div class="audio-player">
-            <audio controls preload="false" >
-              <source src="{{track.audio_file.url}}" type="audio/mp3">
-            </audio>
+          <div class="track">
+            <h2 class="track-name">{% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}}</h2>
+            <div class="audio-player">
+              <audio controls preload="false" >
+                <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3">
+              </audio>
+            </div>
           </div>
-          <br>
+          <hr>
         {% endfor %}
       </div>
     </div>

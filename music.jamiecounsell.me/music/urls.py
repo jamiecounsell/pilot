@@ -9,4 +9,5 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^$', index, name='index'),
+	url(r'^stream/(?P<t>\w+)/$', stream, name="stream")
 )
