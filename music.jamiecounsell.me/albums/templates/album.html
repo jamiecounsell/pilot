@@ -3,18 +3,43 @@
 {% load staticfiles %}
 {% load albums_extras %}
 
-  <div id="album-art" class="row-fluid" style="background-image:url('{{album.background.url}}')">
+  <div id="album-art" class="container" style="background-image:url('{{album.background.url}}')">
 
-    <div id="social-top">
-      FB | TW | WAT
-    </div>
+  
     <div id="cover-art">
-
       <img class="cover-art-photo" src="{{album.cover_art.url}}">
     </div>
+
   </div>
   <div class="container">
     <div id="album-detail" class="row-fluid">
+  <div id="social-top">
+      <ul>
+        <li>
+        <!-- Email -->
+        <a class="social-icons" href="mailto:?Subject={{album.name}}&Body=Check%20out%20this%20album! {{ ABS_URL }}"><img src="{% static 'music/img/icn/email.png' %}" alt="Email" /></a>
+        </li>
+        <li>
+        <!-- Reddit -->
+        <a class="social-icons" href="http://reddit.com/submit?url={{ ABS_URL }}&title={{album.name}}" target="_blank"><img src="{% static 'music/img/icn/reddit.png' %}" alt="Reddit" /></a>
+        </li>
+        <li>
+        <!-- Pinterest -->
+        <a class="social-icons" href="javascript:void((function()%7Bvar%20e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','http://assets.pinterest.com/js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e)%7D)());"><img src="{% static 'music/img/icn/pinterest.png' %}" alt="Pinterest" /></a>
+        </li>
+        <li>
+        <!-- Google+ -->
+        <a class="social-icons" href="https://plus.google.com/share?url={{ ABS_URL }}" target="_blank"><img src="{% static 'music/img/icn/google.png' %}" alt="Google" /></a>
+        </li>   
+        <li>
+        <!-- Twitter -->
+        <a class="social-icons" href="http://twitter.com/share?url={{ ABS_URL }}&text={{album.name}}&hashtags=" target="_blank"><img src="{% static 'music/img/icn/twitter.png' %}" alt="Twitter" /></a>
+        </li>
+        <li>
+        <!-- Facebook -->
+        <a class="social-icons" href="http://www.facebook.com/sharer.php?u={{ ABS_URL }}/"target="_blank"><img src="{% static 'music/img/icn/facebook.png' %}" alt="Facebook" /></a>
+        </li>  
+    </div>
       <div id="track-info" class="col-md-4">
         <h1>{{album.name}} {% if album.is_single %}<span class="single">[Single]</span>{% endif %}</h1>
       
@@ -31,19 +56,50 @@
         <hr>
 
         {% for track in tracks %}
-          <div class="track">
+          <div id="{{track.pk}}" class="track">
+              <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="playpause"></a>
             <h2 class="track-name">{% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}}</h2>
-            <div class="audio-player">
-              <audio controls preload="false" >
+            <div class="audio-player" style="display:none;">
+              <audio id="music-{{track.pk}}" controls preload="auto">
                 <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3">
               </audio>
             </div>
-          </div>
+
+            <script>
+            var e = document.getElementById('music-{{track.pk}}')
+            e.play()
+            e.pause()
+            </script>
+            </div>
           <hr>
         {% endfor %}
       </div>
     </div>
   </div>
+
+<script>
+  function aud_play_pause(_id) {
+    var audio = document.getElementById("music-" + _id.toString());
+    var playPause = document.getElementById("button-"+ _id.toString())
+    if (audio.paused) {
+      var elementArray;
+      elementArray = document.getElementsByClassName("track");
+      for(var i = 0; i < elementArray.length; i++)
+      {
+          em = document.getElementById("music-" + elementArray[i].id.toString())
+          eb = document.getElementById("button-"+  elementArray[i].id.toString())
+          console.log(e)
+          em.pause();
+          eb.src="{% static 'music/img/icn/play.png' %}"
+      }  
+      playPause.src="{% static 'music/img/icn/pause.png' %}"
+      audio.play();
+    } else {
+      playPause.src="{% static 'music/img/icn/play.png' %}"
+      audio.pause();
+   }
+ }
+ </script>
 
 <script>
   var handler = StripeCheckout.configure({

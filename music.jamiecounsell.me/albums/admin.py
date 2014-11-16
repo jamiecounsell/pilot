@@ -10,9 +10,11 @@ class AlbumAdmin(admin.ModelAdmin):
 	def get_readonly_fields(self, request, obj=None):
 		actions_on_top = False
 		if not obj:
-			return ['add_date']
+			return ['add_date',
+					'slug']
 		else:
-			return ['add_date']
+			return ['add_date',
+					'slug']
 
 
 

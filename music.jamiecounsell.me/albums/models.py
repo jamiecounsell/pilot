@@ -2,6 +2,9 @@ from django.db import models
 from django.conf import settings
 from albums.fields import ExclusiveBooleanField
 from albums.validators import photo_validator
+from albums.utilities import slugger
+from django.db.models.signals import post_save
+
 import hashlib
 
 class Album(models.Model):
@@ -19,6 +22,8 @@ class Album(models.Model):
 
 	price 		= models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Price ($)", help_text="Please enter a price. Dollars and cents can be used (ie. 4.99).")
 	
+	slug 		= models.SlugField(max_length=200, unique=True, null=True, blank=True)
+
 	@property
 	def price_incents(self):
 		return int(self.price * 100)
@@ -61,8 +66,9 @@ class Track(models.Model):
 
 class TrackToken(models.Model):
 	track 	= models.ForeignKey(Track)
-	date 	= models.DateTimeField(auto_now=True)
+	date 	= models.FloatField()
 	token 	= models.CharField(max_length=500)
+	counter = models.IntegerField(default=0, blank=False, null=False)
 
 	def save(self, *args, **kwargs):
 		if not self.token:
@@ -74,3 +80,4 @@ class BonusContent(models.Model):
 	album 	= models.ForeignKey(Album)
 	bonus_file = models.FileField(upload_to='bonus/')
 
+post_save.connect(slugger, sender=Album)
