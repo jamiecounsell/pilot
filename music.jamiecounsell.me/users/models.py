@@ -1,22 +1,15 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
 from albums.models import Album
-import hashlib, random
+import hashlib, random, time, calendar
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-    website = models.CharField(max_length=500, null=True, blank=True, verbose_name="website")
-
-    def __unicode__(self):
-        return str(self.user)
 
 class Purchase(models.Model):
-	user = models.ForeignKey(User)
+	email = models.CharField(max_length=100, null=True, blank=True, verbose_name="User Email")
 	album = models.ForeignKey(Album)
 	time = models.DateTimeField(auto_now=True)
 
-	download_link = models.URLField(max_length=500, blank=True, null=True)
+	download_token = models.CharField(max_length=500, blank=True, null=True)
 	download_pin = models.CharField(max_length=10, blank=True, null=True)
 
 	def stripe_charge(self):
@@ -24,10 +17,10 @@ class Purchase(models.Model):
 
 	def generate_link(self):
 		# Hash user email and date purchased to create unique link
-		user_email = str(self.user.email)
+		user_email = str(self.email)
 		date_purchased = str(self.time)
-		hashed = hashlib.sha256((user_email + date_purchased).encode('utf-8')).hexdigest()
-		self.download_link = settings.SITE_URL+settings.DOWNLOAD_URL + hashed
+		hashed = hashlib.sha256((user_email + date_purchased + str(calendar.timegm(time.gmtime()))).encode('utf-8')).hexdigest()
+		self.download_token = hashed
 
 	def generate_pin(self):
 		# Generate random 
@@ -40,7 +33,7 @@ class Purchase(models.Model):
 			self.generate_link()
 			self.generate_pin()
 
-		if not self.download_link:
+		if not self.download_token:
 			self.generate_link()
 
 		if not self.download_pin:
@@ -48,7 +41,7 @@ class Purchase(models.Model):
 		super(Purchase, self).save(*args, **kwargs)
 
 	def get_verbose_name(self):
-		return (self.user.email + ": " + self.album.name).encode('utf-8')
+		return (self.email + ": " + self.album.name).encode('utf-8')
 
 	def __unicode__(self):
 		return self.get_verbose_name()

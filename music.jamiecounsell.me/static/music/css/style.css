@@ -1,5 +1,44 @@
+* {
+	margin: 0;
+}
+html, body {
+	height: 100%;
+}
+.wrapper {
+	min-height: 100%;
+	height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+	height: 100%;
+	margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
+}
+
+.push {
+	height: 120px; /* .push must be the same height as .footer */
+}
+
+.footer {
+	height:30px;
+	width:100%;
+	text-align: center;
+}
+
+
 hr {
 	margin: 0px;
+}
+
+.underliner {
+    border: 0;
+    height: 2px;
+    background: #333;
+    background-image: -webkit-linear-gradient(left, #222, #FFF); 
+    background-image:    -moz-linear-gradient(left, #222, #FFF); 
+    background-image:     -ms-linear-gradient(left, #222, #FFF); 
+    background-image:      -o-linear-gradient(left, #222, #FFF); 
+
+}
+
+h1 {
+	margin-top: 0px !important;
 }
 
 .social-icons img {
@@ -30,7 +69,7 @@ hr {
 }
 
 #social-top li img {
-	width:30px;
+	width:25px;
 	opacity: 0.7;
 }
 
@@ -43,7 +82,7 @@ hr {
 }
 
 #payment-footer {
-	padding-bottom: 15px;
+	padding-bottom: 30px;
 	padding-top:15px;
 	width:100%;
 	text-align: center;
@@ -68,29 +107,38 @@ hr {
 	height:450px;
 }
 
-#album-detail {
-
-}
-
 #album-description {
 	text-align: justify;
 }
 
-.track-name {
-	margin-top:10px;
-	margin-left:20px;
-	margin-bottom:0px;
-  display: inline-block;
-  min-width:100px;
+#track-listing {
+	margin-bottom: 50px;
 }
+
+.track {
+	height:40px;
+}
+
+.track-name {
+	margin:0;
+	margin-top:12px;
+	height:100%;
+	vertical-align: middle;
+	margin-left:10px;
+	font-size: 1.3em;
+	display: inline-block;
+	min-width:100px;
+}
+
 .audio-player {
 
 }
 
-.playpause{
+.trackicon{
+	display:inline-block;
 	width:25px;
-	vertical-align: middle;
-	margin-bottom: 15px; 
+	margin-top:-10px; 
+	margin-right: 10px;
 	opacity:0.6;
 	border:0 !important;
 }
@@ -151,6 +199,40 @@ hr {
 }
 
 
+/* Purchases */
+
+#purchase-container {
+	margin-top:50px !important;
+}
+
+#pin-container {
+	padding-right:0px;
+	margin-top: 10px;
+}
+
+
+.help-text {
+	text-align: center;
+	margin-top: 5px;
+}
+
+.pin, .purchase-album-art, .purchase-album-thanks {
+	width:100%;
+	display: inline-block;
+	margin:0 auto;
+}
+.pin input[type="text"] {
+	font-style: "Courier New", Courier, monospace;
+	line-height: 40px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 23.4%;
+    height: 71px;
+    text-align: center;
+    font-size: 40px;
+}
+
+
 @media (max-width:400px) {
 	#cover-art {
 		width:200px;
@@ -166,6 +248,14 @@ hr {
 		height:300px;
 		background-attachment:initial;
 	}
+
+  #pay-button {
+  	width:100%;
+  }
+
+}
+
+@media (max-width:992px) {
   #social-top li img {
 
     max-width: 32px;
@@ -179,14 +269,7 @@ hr {
   #social-top ul li {
   	    width:16.6%;
   }
-  #pay-button {
-  	width:100%;
-  }
-
-}
-
-@media (max-width:992px) {
-	.payButton {
+  	.payButton {
 		width:initial;
 	}
 	#social-top {

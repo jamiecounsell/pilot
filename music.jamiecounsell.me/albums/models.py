@@ -47,6 +47,8 @@ class Track(models.Model):
 	price 	= models.DecimalField(max_digits=5, null=True, blank=True, decimal_places=2, help_text="Individual price. Leave blank if the track is not to be sold individually.")
 	audio_file = models.FileField(upload_to='tracks/')
 
+	lyrics	= models.TextField(blank=True, null=True)
+
 	@property
 	def price_incents(self):
 		return int(self.price * 100)

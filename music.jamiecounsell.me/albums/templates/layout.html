@@ -7,13 +7,19 @@
   <link rel="stylesheet" type="text/css" href="{% static 'music/css/style.css'         %}">
 
   <script src="https://checkout.stripe.com/checkout.js"></script>
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>{{album.name}}</title>
 
 </head>
 <body>
-  {% block content %}{% endblock %}
+	<div class="wrapper">
+  		{% block content %}{% endblock %}
+  	</div>
+  	<div class="push"></div>
+	<div class="footer">
+	    <p>Design by <a href="http://www.jamiecounsell.me/">Jamie Counsell</a></p>
+	</div>
 </body>
 </html>

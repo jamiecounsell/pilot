@@ -1,10 +1,12 @@
-from django.shortcuts import render
 from albums.models import Album, Track, TrackToken
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseForbidden, Http404
 from albums.utilities import FileIterWrapper
 from django.conf import settings
-import os, datetime, calendar, time
+from django.template import RequestContext
+from users.models import Purchase
+
+import os, datetime, calendar, time, json
 
 def stream(request, t):
 	try:
@@ -60,7 +62,26 @@ def album(request, album_slug):
 				"tokens":tokens,
 				"ABS_URL":settings.SITE_URL + "album/%s" % (album.slug)}
 
-	return render_to_response('album.html', context)
+	return render_to_response('album.html', context, context_instance=RequestContext(request))
 
 def charge(request):
-	pass
+	stoken = request.POST.get('stoken')
+	email = request.POST.get('email')
+	album_id = request.POST.get('album')
+	try:
+		album = Album.objects.get(id=album_id)
+	except Album.DoesNotExist:
+		album = None
+
+	if request.method == "GET":
+		return HttpResponseForbidden()
+	elif not stoken or not email or not album:
+		raise Http404
+	else:
+		#We have a token, email, and album in a POST request
+		new_purchase = Purchase(album=album, email=email)
+		new_purchase.save()
+		response_data = {}
+
+		response_data["redirecturl"] = settings.SITE_URL + "download/" + new_purchase.download_token
+		return HttpResponse(json.dumps(response_data), content_type="application/json")

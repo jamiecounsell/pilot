@@ -12,53 +12,66 @@
 
   </div>
   <div class="container">
+    <div id="social-top" >
+        <ul>
+          <li>
+          <!-- Email -->
+          <a class="social-icons" href="mailto:?Subject={{album.name}}&Body=Check%20out%20this%20album! {{ ABS_URL }}"><img src="{% static 'music/img/icn/email.png' %}" alt="Email" /></a>
+          </li>
+          <li>
+          <!-- Reddit -->
+          <a class="social-icons" href="http://reddit.com/submit?url={{ ABS_URL }}&title={{album.name}}" target="_blank"><img src="{% static 'music/img/icn/reddit.png' %}" alt="Reddit" /></a>
+          </li>
+          <li>
+          <!-- Pinterest -->
+          <a class="social-icons" href="javascript:void((function()%7Bvar%20e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','http://assets.pinterest.com/js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e)%7D)());"><img src="{% static 'music/img/icn/pinterest.png' %}" alt="Pinterest" /></a>
+          </li>
+          <li>
+          <!-- Google+ -->
+          <a class="social-icons" href="https://plus.google.com/share?url={{ ABS_URL }}" target="_blank"><img src="{% static 'music/img/icn/google.png' %}" alt="Google" /></a>
+          </li>   
+          <li>
+          <!-- Twitter -->
+          <a class="social-icons" href="http://twitter.com/share?url={{ ABS_URL }}&text={{album.name}}&hashtags=" target="_blank"><img src="{% static 'music/img/icn/twitter.png' %}" alt="Twitter" /></a>
+          </li>
+          <li>
+          <!-- Facebook -->
+          <a class="social-icons" href="http://www.facebook.com/sharer.php?u={{ ABS_URL }}/"target="_blank"><img src="{% static 'music/img/icn/facebook.png' %}" alt="Facebook" /></a>
+          </li>  
+      </div>
     <div id="album-detail" class="row-fluid">
-  <div id="social-top">
-      <ul>
-        <li>
-        <!-- Email -->
-        <a class="social-icons" href="mailto:?Subject={{album.name}}&Body=Check%20out%20this%20album! {{ ABS_URL }}"><img src="{% static 'music/img/icn/email.png' %}" alt="Email" /></a>
-        </li>
-        <li>
-        <!-- Reddit -->
-        <a class="social-icons" href="http://reddit.com/submit?url={{ ABS_URL }}&title={{album.name}}" target="_blank"><img src="{% static 'music/img/icn/reddit.png' %}" alt="Reddit" /></a>
-        </li>
-        <li>
-        <!-- Pinterest -->
-        <a class="social-icons" href="javascript:void((function()%7Bvar%20e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','http://assets.pinterest.com/js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e)%7D)());"><img src="{% static 'music/img/icn/pinterest.png' %}" alt="Pinterest" /></a>
-        </li>
-        <li>
-        <!-- Google+ -->
-        <a class="social-icons" href="https://plus.google.com/share?url={{ ABS_URL }}" target="_blank"><img src="{% static 'music/img/icn/google.png' %}" alt="Google" /></a>
-        </li>   
-        <li>
-        <!-- Twitter -->
-        <a class="social-icons" href="http://twitter.com/share?url={{ ABS_URL }}&text={{album.name}}&hashtags=" target="_blank"><img src="{% static 'music/img/icn/twitter.png' %}" alt="Twitter" /></a>
-        </li>
-        <li>
-        <!-- Facebook -->
-        <a class="social-icons" href="http://www.facebook.com/sharer.php?u={{ ABS_URL }}/"target="_blank"><img src="{% static 'music/img/icn/facebook.png' %}" alt="Facebook" /></a>
-        </li>  
-    </div>
+
       <div id="track-info" class="col-md-4">
         <h1>{{album.name}} {% if album.is_single %}<span class="single">[Single]</span>{% endif %}</h1>
       
         <p id="album-description">
-          {{album.description}}
+          {{album.description|safe}}
         </p>
 
         <div id="payment-footer">
-          <button id="pay-button" class="payButton">Purchase Album ({{album.price_read}})</button>
+            <form action="" method="POST">
+              {% csrf_token %}  
+              <button id="pay-button" class="payButton">Purchase Album ({{album.price_read}})</button>
+            </form>
+
+
         </div>
       </div>
-      <div id="track-listing" class="col-md-6">
+      <div id="track-listing" class="col-md-8">
         <h1>Track Listing</h1>
-        <hr>
+        <hr class="underliner">
 
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
-              <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="playpause"></a>
-            <h2 class="track-name">{% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}}</h2>
+
+            <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>
+
+            <a href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)"  class="trackicon">{% if track.lyrics %}<img src="{% static 'music/img/icn/lyrics.png' %}" class="trackicon">{% endif %}</a>
+
+            <h2 class="track-name">
+              {% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}}
+            </h2>
+
             <div class="audio-player" style="display:none;">
               <audio id="music-{{track.pk}}" controls preload="auto">
                 <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3">
@@ -72,7 +85,17 @@
             </script>
             </div>
           <hr>
+          {% if track.lyrics %}
+            <div id="lyrics-{{track.pk}}" style="display:none;">
+              <h3 style="margin-left:43px;">Lyrics</h3>
+              <p style="padding:5px;margin-left:38px;">{{track.lyrics|safe}}</p>
+                <hr>
+            </div>
+          {% endif %}
         {% endfor %}
+
+
+
       </div>
     </div>
   </div>
@@ -106,8 +129,18 @@
     key: 'pk_test_gTkXGUlLBYUiQFIo1OodN5Tw',
     image: '{{album.cover_art.url}}',
     token: function(token) {
-      // Use the token to create the charge with a server-side script.
-      // You can access the token ID with `token.id`
+        $.ajax({
+          type: "POST",
+          url: '/charge/',
+          data:  {'stoken':token.id, 
+                  'email':token.email,
+                  'csrfmiddlewaretoken': '{{ csrf_token }}',
+                  'album':{{album.pk}}
+                },
+        }).done(function(response) { 
+          window.location.href = response.redirecturl;
+
+        });
     }
   });
 
@@ -121,4 +154,6 @@
     e.preventDefault();
   });
 </script>
+
+
 {% endblock %}
