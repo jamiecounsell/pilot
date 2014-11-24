@@ -14,14 +14,32 @@ BASE_DIR        = os.path.dirname(os.path.dirname(__file__))
 SITE_URL        = "http://music.jamiecounsell.com/"
 DOWNLOAD_URL    = "download/"
 
+# Let's get dem environment variables
+
+# Django Variable
+VAR_DEBUG           = bool(os.getenv("DEBUG", True))
+DJANGO_SECRET       = unicode(os.environ.get("DJANGO_SECRET_KEY"))
+
+# Email Variables
+VAR_EMAIL_HOST      = unicode(os.environ.get("EMAIL_HOST"))
+VAR_EMAIL_PORT      = int(os.environ.get("EMAIL_PORT"))
+VAR_EMAIL_USER      = unicode(os.environ.get("EMAIL_HOST_USER"))
+VAR_EMAIL_PASSW     = unicode(os.environ.get("EMAIL_HOST_PASSWORD"))
+VAR_EMAIL_USE_TLS   = bool(os.environ.get("EMAIL_USE_TLS"))
+VAR_DEFAULT_FROM    = unicode(os.environ.get("DEFAULT_FROM_EMAIL"))
+
+# Stripe API Key Variables
+STRIPE_SECRET_KEY       = unicode(os.environ.get("STRIPE_SECRET"))
+STRIPE_PUBLISHABLE_KEY  = unicode(os.environ.get("STRIPE_PUBLISH"))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xk9)l$g_)v5!d+*sdj9f$!ihzqq6)6%(2w_axayj#sqq9t2$je'
+SECRET_KEY = DJANGO_SECRET
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = VAR_DEBUG
 
 TEMPLATE_DEBUG = True
 
@@ -125,3 +143,12 @@ PX_SIZE_COVER_ART  = (500, 500)
 MB_SIZE_COVER_ART  = 2
 
 ALLOWED_IMAGE_FORMATS = ['jpg', 'jpeg', 'png', 'pjpeg']
+
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = VAR_EMAIL_HOST
+EMAIL_PORT = VAR_EMAIL_PORT
+EMAIL_HOST_USER = VAR_EMAIL_USER
+EMAIL_HOST_PASSWORD = VAR_EMAIL_PASSW
+EMAIL_USE_TLS = VAR_EMAIL_USE_TLS
+DEFAULT_FROM_EMAIL = VAR_DEFAULT_FROM

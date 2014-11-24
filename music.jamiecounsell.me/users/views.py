@@ -1,8 +1,52 @@
 from django.shortcuts import render, render_to_response
+from albums.models import Album
 from users.models import Purchase
 from django.http import HttpResponse, HttpResponseForbidden, Http404
 from django.template import RequestContext
+from users.utilities import sendPurchaseEmail
+from django.conf import settings
+import stripe, json
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def charge(request):
+	stoken = request.POST.get('stoken')
+	email = request.POST.get('email')
+	album_id = request.POST.get('album')
+
+	try:
+		album = Album.objects.get(id=album_id)
+	except Album.DoesNotExist:
+		album = None
+
+	if request.method == "GET":
+		return HttpResponseForbidden()
+
+	elif not stoken or not email or not album:
+		raise Http404
+	else:
+		#We have a token, email, and album in a POST request
+		new_purchase = Purchase(album=album, email=email)
+
+		amount = int(album.price_incents)
+
+		customer = stripe.Customer.create(
+			email=email,
+			card=stoken
+		)
+		charge = stripe.Charge.create(
+			customer=customer.id,
+			amount=amount,
+			currency='cad',
+			description=album.name + " digital download."
+		)
+
+		new_purchase.save()
+
+		response_data = {}
+
+		response_data["redirecturl"] = settings.SITE_URL + "download/" + new_purchase.download_token
+		return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def download(request, t):
 

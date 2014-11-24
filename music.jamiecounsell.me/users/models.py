@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from albums.models import Album
+from users.utilities import sendPurchaseEmail
 import hashlib, random, time, calendar
 
 
@@ -27,11 +28,27 @@ class Purchase(models.Model):
 		pin = random.sample(xrange(10), 4)
 		self.download_pin =  "".join([str(x) for x in pin])
 
+	def send_email(self):
+		unique_url = settings.SITE_URL+'download/'+self.download_token
+
+		context = {
+		'subject': "Your "+self.album.name+" Digital Download",
+		'album':self.album,
+		'purchase':self,
+		'unique_url':unique_url,
+		'site_url':settings.SITE_URL[:-1],
+		}
+
+		sendPurchaseEmail('', context, self)
+
+
 	def save(self, *args, **kwargs):
 		if not self.pk:
 			# New purchase
 			self.generate_link()
 			self.generate_pin()
+
+			self.send_email()
 
 		if not self.download_token:
 			self.generate_link()

@@ -1,5 +1,6 @@
 * {
 	margin: 0;
+	outline:none;
 }
 html, body {
 	height: 100%;
@@ -7,16 +8,15 @@ html, body {
 .wrapper {
 	min-height: 100%;
 	height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
-	height: 100%;
-	margin: 0 auto -155px; /* the bottom margin is the negative value of the footer's height */
+	margin: 0 auto -150px; /* the bottom margin is the negative value of the footer's height */
 }
 
 .push {
-	height: 120px; /* .push must be the same height as .footer */
+	height: 150px; /* .push must be the same height as .footer */
 }
 
 .footer {
-	height:30px;
+	height:150px;
 	width:100%;
 	text-align: center;
 }
@@ -202,22 +202,41 @@ h1 {
 /* Purchases */
 
 #purchase-container {
-	margin-top:50px !important;
+	margin-top:35px;
+	position: relative;
+	width:100%;
 }
 
-#pin-container {
+#purchase-pin-container, #purchase-help-container, #purchase-album-art-container, #purchase-thanks-container {
+	width:300px;
 	padding-right:0px;
-	margin-top: 10px;
+	margin-top:10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+.purchase-thanks h1  {
+	text-align: center;
+	width:100%;
+	color:#555;
+}
 
+.purchase-thanks h2 {
+	line-height: 1.4em;
+	text-align: center;
+	font-size: 1em;
+	color:#555;
+}
+
+.purchase-cover-art-photo {
+	width:300px;
+}
 .help-text {
 	text-align: center;
-	margin-top: 5px;
 }
 
 .pin, .purchase-album-art, .purchase-album-thanks {
-	width:100%;
+	width:300px;
 	display: inline-block;
 	margin:0 auto;
 }
@@ -226,10 +245,16 @@ h1 {
 	line-height: 40px;
     padding: 10px;
     border: 1px solid #ddd;
-    width: 23.4%;
-    height: 71px;
+    width: 72px;
+    height: 70px;
     text-align: center;
     font-size: 40px;
+}
+
+#pin-button {
+	margin-top: 10px;
+	width: 100%;
+	text-align: center;
 }
 
 

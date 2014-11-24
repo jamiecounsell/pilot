@@ -3,13 +3,10 @@
 {% load staticfiles %}
 {% load albums_extras %}
 
-  <div id="album-art" class="container" style="background-image:url('{{album.background.url}}')">
-
-  
+  <div id="album-art" class="container" style="background-image:url('{{album.background.url}}')">  
     <div id="cover-art">
       <img class="cover-art-photo" src="{{album.cover_art.url}}">
     </div>
-
   </div>
   <div class="container">
     <div id="social-top" >
@@ -38,9 +35,8 @@
           <!-- Facebook -->
           <a class="social-icons" href="http://www.facebook.com/sharer.php?u={{ ABS_URL }}/"target="_blank"><img src="{% static 'music/img/icn/facebook.png' %}" alt="Facebook" /></a>
           </li>  
-      </div>
+    </div>
     <div id="album-detail" class="row-fluid">
-
       <div id="track-info" class="col-md-4">
         <h1>{{album.name}} {% if album.is_single %}<span class="single">[Single]</span>{% endif %}</h1>
       
@@ -53,8 +49,6 @@
               {% csrf_token %}  
               <button id="pay-button" class="payButton">Purchase Album ({{album.price_read}})</button>
             </form>
-
-
         </div>
       </div>
       <div id="track-listing" class="col-md-8">
@@ -63,11 +57,8 @@
 
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
-
             <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>
-
             <a href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)"  class="trackicon">{% if track.lyrics %}<img src="{% static 'music/img/icn/lyrics.png' %}" class="trackicon">{% endif %}</a>
-
             <h2 class="track-name">
               {% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}}
             </h2>
@@ -83,7 +74,7 @@
             e.play()
             e.pause()
             </script>
-            </div>
+          </div>
           <hr>
           {% if track.lyrics %}
             <div id="lyrics-{{track.pk}}" style="display:none;">
@@ -93,9 +84,6 @@
             </div>
           {% endif %}
         {% endfor %}
-
-
-
       </div>
     </div>
   </div>
@@ -111,7 +99,6 @@
       {
           em = document.getElementById("music-" + elementArray[i].id.toString())
           eb = document.getElementById("button-"+  elementArray[i].id.toString())
-          console.log(e)
           em.pause();
           eb.src="{% static 'music/img/icn/play.png' %}"
       }  
@@ -121,12 +108,12 @@
       playPause.src="{% static 'music/img/icn/play.png' %}"
       audio.pause();
    }
- }
- </script>
+  }
+</script>
 
 <script>
   var handler = StripeCheckout.configure({
-    key: 'pk_test_gTkXGUlLBYUiQFIo1OodN5Tw',
+    key: '{{stripe_key}}',
     image: '{{album.cover_art.url}}',
     token: function(token) {
         $.ajax({
@@ -139,7 +126,6 @@
                 },
         }).done(function(response) { 
           window.location.href = response.redirecturl;
-
         });
     }
   });

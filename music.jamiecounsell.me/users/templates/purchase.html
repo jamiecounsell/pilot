@@ -1,65 +1,69 @@
 {% extends "layout.html" %}
 {% block content %}
-
-<div class="container">
-	<div class="row">
-		<div id="purchase-container" class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4" >
-			<div class="purchase-thanks">
-				<h1>Thank you!</h1>
-			</div>
+<div id="purchase-container" >
+	<div id="purchase-thanks-container">
+		<div class="purchase-thanks">
+			<h1>Thank you!</h1>
+			<h2>Thank you for purchasing {{album.name}}. Download instructions have been sent to {{user_email}}. Please enter the PIN included in the email to start your download.</h2>
 		</div>
 	</div>
-	<div class="row">
-		<div id="purchase-container" class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4" >
-			<div class="purchase-album-art">
-				<img class="cover-art-photo"  src="{{album.cover_art.url}}">
-			</div>
+	<div id="purchase-album-art-container">
+		<div class="purchase-album-art">
+			<img class="purchase-cover-art-photo"  src="{{album.cover_art.url}}">
 		</div>
-	</div>
-	<div class="row">
-		<div id="pin-container" class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4" >
+		<div id="purchase-pin-container" >
 			<div class="pin">
-				<input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin1" onkeyup="moveOnMax(this,'pin2')" />
-				<input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin2" onkeyup="moveOnMax(this,'pin3')" />
-				<input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin3" onkeyup="moveOnMax(this,'pin4')" />
-				<input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin4" onkeyup="moveOnMax(this, '')"/>
+			<form autocomplete="off" id="form-pin">
+				<input type="text" class="txtPin" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin1" onkeyup="checkBackspace(this)" />
+				<input type="text" class="txtPin" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin2" onkeyup="checkBackspace(this)" />
+				<input type="text" class="txtPin" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin3" onkeyup="checkBackspace(this)" />
+				<input type="text" class="txtPin" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin4" onkeyup="checkBackspace(this)" />
 
-				<script>
-					moveOnMax =function (field, nextFieldID) {
-							//alert('e.keyCode = '+e.keyCode);
-						 var e = event;
-						 var key = e.which || e.keyCode;
-
-						 switch (key)
-						 {
-						  case 8://Backspace
-						  	$("#pin1").val('')
-						  	$("#pin2").val('')
-						  	$("#pin3").val('')
-						  	$("#pin4").val('')
-						  	document.getElementById('pin1').focus()
-						  break;
-						 }
-						
-					    if (field.value.length == 1 && nextFieldID != '') {
-					        document.getElementById(nextFieldID).focus();
-					    }
-					}
-
-				</script>
-
-				<button id="pin-button"> 
-
+				<button id="pin-button" class="payButton"> Download</button>
+			</form>
 			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div id="help-container" class="container col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4" >
+		<div id="purchase-help-container">
 			<div class="help-text">
 				<a href="mailto:jamiecounsell@me.com">Need Help?</a>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$('.txtPin').keypress(function() {
+	if (event.charCode >= 48 && event.charCode <=57) {
+		if (this.id != "pin4") {
+	        var inputs = $(this).closest('form').find(':input');
+	        inputs.eq(inputs.index(this)+ 1).focus();
+	    }
+	} else {
+		return false;	
+	}
+	});
+
+	$(".txtPin").click(function() {
+	    $('html, body').animate({
+	        scrollTop: $("#form-pin").offset().bottom
+	    }, 200);
+	});
+
+	function checkBackspace(field) {
+	 var e = event;
+	 var key = e.which || e.keyCode;
+	 switch (key)
+	 {
+	  case 8://Backspace
+	  	$("#pin1").val('')
+	  	$("#pin2").val('')
+	  	$("#pin3").val('')
+	  	$("#pin4").val('')
+	  	document.getElementById('pin1').focus()
+	  break;
+	 }
+	}
+
+</script>
 
 {% endblock %}

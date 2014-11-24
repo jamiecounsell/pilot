@@ -1,6 +1,5 @@
 from django.utils.text import slugify 
 
-
 class FileIterWrapper(object):
 	def __init__(self, flo, chunk_size = 1024**2):
 		self.flo = flo
@@ -29,3 +28,4 @@ def slugger(sender, **kwargs):
 		except Exception as e:
 			print e
 			print "wat"
+

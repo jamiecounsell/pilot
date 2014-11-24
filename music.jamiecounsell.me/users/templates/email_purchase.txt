@@ -1,0 +1,10 @@
+This email is your receipt. Please keep it for your records. You may also receive an email from Stripe, our friendly and secure payment system. Instructions on how to download your music is included below. If you require assistance at any time, please contact me!
+
+To download {{album.name}}, start by visiting your unique link. When prompted for your PIN, enter your unique PIN as it is displayed below.
+
+Your unique link: {{unique_url}}
+Your download PIN: {{purchase.pin}}
+
+Regards,
+
+Jamie
