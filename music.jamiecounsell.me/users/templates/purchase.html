@@ -37,7 +37,57 @@
 	</div>
 </div>
 
-<script src="{% static 'music/js/purchase.js' %}"></script>
+<script>
+	// Function to manage 4 digit PIN input
+	$('.txtPin').keypress(function() {
+
+		// Allow numeric only
+		if (event.charCode >= 48 && event.charCode <=57) {
+			if (this.id != "pin4") {
+
+				// Move focus to next input
+		        var inputs = $(this).closest('form').find(':input');
+		        inputs.eq(inputs.index(this)+ 1).focus();
+		    }
+
+		} else {
+			return false;	
+		}
+	});
+
+	// Fix for iOS Safari not scrolling to focused input
+	$(".txtPin").click(function() {
+	    $('html, body').animate({
+	        scrollTop: $("#form-pin").offset().bottom
+	    }, 200);
+	});
+
+	// Function that input fields will use to determine if backspace is pressed.
+	// If it is pressed, clear the entire PIN form and focus on first input.
+	function checkBackspace(field) {
+	 var e = event;
+	 var key = e.which || e.keyCode;
+	 switch (key)
+	 {
+	  case 8://Backspace
+	  	$("#pin1").val('')
+	  	$("#pin2").val('')
+	  	$("#pin3").val('')
+	  	$("#pin4").val('')
+	  	document.getElementById('pin1').focus()
+	  break;
+	 }
+	}
+
+	// Reconstruct PIN from all input fields and add to POST request
+	$("#form-pin").on("submit", function(e) {
+		var PIN = $("#pin1").val() + $("#pin2").val() + $("#pin3").val() + $("#pin4").val()
+	  	$('<input />').attr('type', 'hidden')
+	      .attr('name', "PIN")
+	      .attr('value', PIN)
+	      .appendTo('#form-pin');
+	});
+</script>
 
 
 {% endblock %}

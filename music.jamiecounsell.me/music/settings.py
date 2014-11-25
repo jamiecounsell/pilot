@@ -10,6 +10,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dotenv
+PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
+dotenv.load_dotenv(os.path.join(PROJECT_PATH, ".env"))
+
 BASE_DIR        = os.path.dirname(os.path.dirname(__file__))
 SITE_URL        = "http://music.jamiecounsell.com/"
 DOWNLOAD_URL    = "download/"

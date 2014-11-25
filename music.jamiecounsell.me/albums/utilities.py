@@ -29,3 +29,13 @@ def slugger(sender, **kwargs):
 			print e
 			print "wat"
 
+def trackSort( t_list ):
+	for i in range( 1, len( t_list ) ):
+		tmp = t_list[i]
+		k = i
+		while k > 0 and int(tmp.track_number) < int(t_list[k - 1].track_number):
+			t_list[k] = t_list[k - 1]
+			k -= 1
+		t_list[k] = tmp
+	print t_list
+	return t_list

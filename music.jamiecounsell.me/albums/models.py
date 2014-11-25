@@ -42,6 +42,7 @@ class Album(models.Model):
 		return self.readable_name()
 
 class Track(models.Model):
+	track_number = models.PositiveSmallIntegerField()
 	name 	= models.CharField(max_length=200, null=False,blank=False, help_text="Track name.")
 	album 	= models.ForeignKey(Album)
 	price 	= models.DecimalField(max_digits=5, null=True, blank=True, decimal_places=2, help_text="Individual price. Leave blank if the track is not to be sold individually.")

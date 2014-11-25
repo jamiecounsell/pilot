@@ -5,6 +5,7 @@ from albums.utilities import FileIterWrapper
 from django.conf import settings
 from django.template import RequestContext
 from users.models import Purchase
+from albums.utilities import trackSort
 import os, datetime, calendar, time, json
 
 def stream(request, t):
@@ -53,7 +54,7 @@ def album(request, album_slug):
 	album = Album.objects.get(slug=album_slug)
 	if not album:
 		album = Album.objects.all().order_by('-id')[0]
-	tracks = Track.objects.filter(album=album)
+	tracks = trackSort(list(Track.objects.filter(album=album)))
 	tokens = {}
 	for t in tracks:
 			tok = TrackToken(track=t, date=calendar.timegm(time.gmtime()), counter=0)
