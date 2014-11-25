@@ -8,15 +8,15 @@ html, body {
 .wrapper {
 	min-height: 100%;
 	height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
-	margin: 0 auto -150px; /* the bottom margin is the negative value of the footer's height */
+	margin: 0 auto -40px; /* the bottom margin is the negative value of the footer's height */
 }
 
 .push {
-	height: 150px; /* .push must be the same height as .footer */
+	height: 40px; /* .push must be the same height as .footer */
 }
 
 .footer {
-	height:150px;
+	height:40px;
 	width:100%;
 	text-align: center;
 }
@@ -107,7 +107,7 @@ h1 {
 	background-repeat: no-repeat;
 	background-attachment:fixed;
 	width:100%;
-	height:450px;
+	height:350px;
 }
 
 #album-description {
@@ -148,9 +148,9 @@ h1 {
 
 
 #cover-art {
-	margin-top:75px !important;
-	width:300px;
-	height:300px;
+	margin-top:50px !important;
+	width:250px;
+	height:250px;
 	margin:0 auto;
 	-webkit-box-shadow: 0px 0px 20px 15px rgba(0, 0, 0, .50);
 	-moz-box-shadow: 	0px 0px 20px 15px rgba(0, 0, 0, .50);
@@ -158,8 +158,8 @@ h1 {
 }
 
 .cover-art-photo {
-	width:300px;
-	height:300px;
+	width:250px;
+	height:250px;
 }
 
 .payButton {
@@ -205,7 +205,7 @@ h1 {
 /* Purchases */
 
 #purchase-container {
-	margin-top:35px;
+	padding-top:35px;
 	position: relative;
 	width:100%;
 }
