@@ -3,7 +3,8 @@ from django.template.loader import render_to_string
 from django.template import Context
 from django.conf import settings
 from albums.models import Track
-import zipfile, StringIO
+from django.http import HttpResponse
+import zipfile, StringIO, os
 
 def sendPurchaseEmail(template, context, purchase):
 	subject	  = "Your " + purchase.album.name + " Digital Download Purchase"
@@ -21,12 +22,19 @@ def sendPurchaseEmail(template, context, purchase):
 def zipForDownload(album):
 
 	tracks = Track.objects.filter(album=album)
+	track_files = [open(f.audio_file.path, 'rb') for f in tracks]
 	zipped_file = StringIO.StringIO()
 	with zipfile.ZipFile(zipped_file, 'w') as zip:
-		for i, f in tracks:
-			print i, f
+		for i, f in enumerate(track_files):
 			f.seek(0)
-			zip.writestr("{}".format(i), f.read())
+			name = tracks[i].name
+			ext = os.path.basename(f.name).split('.')[-1]
+			zip.writestr("{0}.{1}".format(name, ext), f.read())
+
+	zipped_file.seek(0)
+	response = HttpResponse(zipped_file, content_type='application/octet-stream')
+	response['Content-Disposition'] = 'attachment; filename=%s.zip' % (album.name)
+	return response
 
 
 

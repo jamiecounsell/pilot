@@ -12,14 +12,20 @@
 			<img class="purchase-cover-art-photo"  src="{{album.cover_art.url}}">
 		</div>
 		<div id="purchase-pin-container" >
+		{% if error %}
+		<div class="alert alert-danger error">
+		<p>{{error}}</p>
+		</div>
+		{% endif %}
 			<div class="pin">
-			<form autocomplete="off" id="form-pin">
+			<form autocomplete="off" id="form-pin" method="POST" action="{{url}}">
+				{% csrf_token %}  
 				<input type="text" class="txtPin" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin1" onkeyup="checkBackspace(this)" />
 				<input type="text" class="txtPin" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin2" onkeyup="checkBackspace(this)" />
 				<input type="text" class="txtPin" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin3" onkeyup="checkBackspace(this)" />
 				<input type="text" class="txtPin" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength=1 id="pin4" onkeyup="checkBackspace(this)" />
 
-				<button id="pin-button" class="payButton"> Download</button>
+				<button id="pin-button" class="payButton" type="submit"> Download</button>
 			</form>
 			</div>
 		</div>
@@ -63,6 +69,14 @@
 	  break;
 	 }
 	}
+
+	$("#form-pin").on("submit", function(e) {
+		var PIN = $("#pin1").val() + $("#pin2").val() + $("#pin3").val() + $("#pin4").val()
+	  	$('<input />').attr('type', 'hidden')
+          .attr('name', "PIN")
+          .attr('value', PIN)
+          .appendTo('#form-pin');
+	});
 
 </script>
 

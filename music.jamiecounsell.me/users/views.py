@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseForbidden, Http404
 from django.template import RequestContext
 from users.utilities import sendPurchaseEmail
 from django.conf import settings
+from users.utilities import zipForDownload
 import stripe, json
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -49,20 +50,19 @@ def charge(request):
 		return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def download(request, t):
-
 	try:
 		purchase = Purchase.objects.get(download_token=t)
 	except Purchase.DoesNotExist:
 		raise Http404
 
 	if request.method == "GET":
-		return downloadPrePin(request, purchase)
+		return downloadPrePin(request, purchase, None)
 	elif request.method == "POST":
 		return downloadPostPin(request, purchase)
 	else:
 		return HttpResponseForbidden()
 
-def downloadPrePin(request, purchase):
+def downloadPrePin(request, purchase, error):
 	from_site = False
 	try:
 		if 'music.jamiecounsell.me' in request.META['HTTP_REFERER'].split('/')\
@@ -71,13 +71,17 @@ def downloadPrePin(request, purchase):
 	except KeyError:
 		pass
 
-	context = {'from_site':from_site, 'album':purchase.album, 'user_email':purchase.email}
+	URL = request.get_full_path
+
+	context = {'from_site':from_site, 'album':purchase.album, 'user_email':purchase.email, 'url':URL, "error":error}
 	
 	return render_to_response('purchase.html', context, context_instance=RequestContext(request))
 
 def downloadPostPin(request, purchase):
 	if request.POST.get('PIN').encode('utf-8') == purchase.download_pin.encode('utf-8'):
-		for track in Track.objects.filter(album=purchase.album):
-			pass
+		resp = zipForDownload(purchase.album)
+		return resp
+
 	else:
-		return HttpResponseForbidden()
+		error = "Invalid PIN. Please try again!"
+		return downloadPrePin(request, purchase, error)

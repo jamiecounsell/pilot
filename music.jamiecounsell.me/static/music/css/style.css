@@ -21,6 +21,9 @@ html, body {
 	text-align: center;
 }
 
+.error {
+	margin-bottom:10px;
+}
 
 hr {
 	margin: 0px;
