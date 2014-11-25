@@ -37,47 +37,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-	$('.txtPin').keypress(function() {
-	if (event.charCode >= 48 && event.charCode <=57) {
-		if (this.id != "pin4") {
-	        var inputs = $(this).closest('form').find(':input');
-	        inputs.eq(inputs.index(this)+ 1).focus();
-	    }
-	} else {
-		return false;	
-	}
-	});
+<script src="{% static 'music/js/purchase.js' %}"></script>
 
-	$(".txtPin").click(function() {
-	    $('html, body').animate({
-	        scrollTop: $("#form-pin").offset().bottom
-	    }, 200);
-	});
-
-	function checkBackspace(field) {
-	 var e = event;
-	 var key = e.which || e.keyCode;
-	 switch (key)
-	 {
-	  case 8://Backspace
-	  	$("#pin1").val('')
-	  	$("#pin2").val('')
-	  	$("#pin3").val('')
-	  	$("#pin4").val('')
-	  	document.getElementById('pin1').focus()
-	  break;
-	 }
-	}
-
-	$("#form-pin").on("submit", function(e) {
-		var PIN = $("#pin1").val() + $("#pin2").val() + $("#pin3").val() + $("#pin4").val()
-	  	$('<input />').attr('type', 'hidden')
-          .attr('name', "PIN")
-          .attr('value', PIN)
-          .appendTo('#form-pin');
-	});
-
-</script>
 
 {% endblock %}

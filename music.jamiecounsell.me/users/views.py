@@ -65,23 +65,26 @@ def download(request, t):
 def downloadPrePin(request, purchase, error):
 	from_site = False
 	try:
+		# Determine if this is a redirect from the site or a click from an email
 		if 'music.jamiecounsell.me' in request.META['HTTP_REFERER'].split('/')\
 		or 'music.jamiecounsell.com' in request.META['HTTP_REFERER'].split('/'):
 			from_site = True
 	except KeyError:
 		pass
 
+	# Get URL to point the PIN POST request at
 	URL = request.get_full_path
-
 	context = {'from_site':from_site, 'album':purchase.album, 'user_email':purchase.email, 'url':URL, "error":error}
 	
 	return render_to_response('purchase.html', context, context_instance=RequestContext(request))
 
 def downloadPostPin(request, purchase):
 	if request.POST.get('PIN').encode('utf-8') == purchase.download_pin.encode('utf-8'):
+		# Get zip response with all tracks and bonus content
 		resp = zipForDownload(purchase.album)
 		return resp
 
 	else:
+		# Otherwise, return the same page again with an error
 		error = "Invalid PIN. Please try again!"
 		return downloadPrePin(request, purchase, error)

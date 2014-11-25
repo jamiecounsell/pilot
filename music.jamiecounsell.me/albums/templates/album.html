@@ -70,6 +70,7 @@
             </div>
 
             <script>
+            // Fix HTML5 Audio Sprites so they're seekable on iOS
             var e = document.getElementById('music-{{track.pk}}')
             e.play()
             e.pause()
@@ -88,58 +89,7 @@
     </div>
   </div>
 
-<script>
-  function aud_play_pause(_id) {
-    var audio = document.getElementById("music-" + _id.toString());
-    var playPause = document.getElementById("button-"+ _id.toString())
-    if (audio.paused) {
-      var elementArray;
-      elementArray = document.getElementsByClassName("track");
-      for(var i = 0; i < elementArray.length; i++)
-      {
-          em = document.getElementById("music-" + elementArray[i].id.toString())
-          eb = document.getElementById("button-"+  elementArray[i].id.toString())
-          em.pause();
-          eb.src="{% static 'music/img/icn/play.png' %}"
-      }  
-      playPause.src="{% static 'music/img/icn/pause.png' %}"
-      audio.play();
-    } else {
-      playPause.src="{% static 'music/img/icn/play.png' %}"
-      audio.pause();
-   }
-  }
-</script>
-
-<script>
-  var handler = StripeCheckout.configure({
-    key: '{{stripe_key}}',
-    image: '{{album.cover_art.url}}',
-    token: function(token) {
-        $.ajax({
-          type: "POST",
-          url: '/charge/',
-          data:  {'stoken':token.id, 
-                  'email':token.email,
-                  'csrfmiddlewaretoken': '{{ csrf_token }}',
-                  'album':{{album.pk}}
-                },
-        }).done(function(response) { 
-          window.location.href = response.redirecturl;
-        });
-    }
-  });
-
-  document.getElementById('pay-button').addEventListener('click', function(e) {
-    // Open Checkout with further options
-    handler.open({
-      name: '{{album.name}}',
-      description: '{{album.name}} Digital Download',
-      amount: {% if album.price_incents %}{{album.price_incents}}{% else %}0{% endif %}
-    });
-    e.preventDefault();
-  });
-</script>
+<script src="{% static 'music/js/album.js' %}"></script>
 
 
 {% endblock %}

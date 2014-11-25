@@ -11,4 +11,4 @@
 .bash_logout
 .sqlite*
 *.env
-
+ip_config.sh
