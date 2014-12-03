@@ -1,3 +1,4 @@
+.gitconfig
 *.pyc
 media/
 */static/admin/
