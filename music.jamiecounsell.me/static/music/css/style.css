@@ -247,22 +247,25 @@ h1 {
 }
 
 .track {
-	height:40px;
+	height:50px;
+	line-height:10px;
+	margin-top:10px;
+}
+
+.track a {
+	height:20px;
+	margin-top:10px;
 }
 
 .track-name {
 	margin:0;
-	margin-top:12px;
+	padding-top:10px;
 	height:100%;
 	vertical-align: middle;
 	margin-left:10px;
 	font-size: 1.3em;
 	display: inline-block;
 	min-width:100px;
-}
-
-.audio-player {
-
 }
 
 .trackicon{
@@ -394,7 +397,7 @@ h1 {
 	#cover-art {
 		width:200px;
 		height:200px;
-    margin-top:15px !important;
+	margin-top:15px !important;
 	}
 	.cover-art-photo {
 		width:200px;
@@ -406,9 +409,10 @@ h1 {
 		background-attachment:initial;
 	}
 
-  #pay-button {
-  	width:100%;
-  }
+	#pay-button {
+		width:100%;
+	}
+
 
 }
 
@@ -438,6 +442,15 @@ h1 {
 	}
 	.overlay {
 		opacity: 0.7;
+	}
+	.track {
+		height:auto;
+		padding:5px 0px 10px 0px;
+	}
+	.track-name {
+		display: block;
+		margin-top:5px;
+		margin-left:3px;
 	}
 }
 

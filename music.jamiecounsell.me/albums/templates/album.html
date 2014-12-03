@@ -11,7 +11,7 @@
       <span class="album-menu-icon" style="top:23px;" ></span>
     </a></button>
     <div id="album-menu">
-      <h3>Albums by this artist</h3>
+      <h3>Albums By This Artist</h3>
       <ul>
         <a href="#"><li class="menu-selected"><img src="{{album.cover_art.url}}" class="menu-art"><h4>{{album.name}} {% if album.is_single %}[single]{% endif %}<span style="float:right;"><img style="height:20px;opacity:0.5;" src="{% static 'music/img/icn/check.png' %}"></span></h4></li></a>
       {% for a in albums %}
@@ -75,8 +75,10 @@
 
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
-            <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>
-            <a href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)"  class="trackicon">{% if track.lyrics %}<img src="{% static 'music/img/icn/lyrics.png' %}" class="trackicon">{% endif %}</a>
+              <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>
+              {% if track.lyrics %}<a class="trackicon" href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)">{% if track.lyrics %}<img src="{% static 'music/img/icn/lyrics.png' %}" class="trackicon">{% endif %}</a>
+              {% else %} <span class="trackicon"></span>
+              {% endif %}
             <h2 class="track-name">
               {% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}}
             </h2>
