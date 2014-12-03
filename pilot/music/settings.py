@@ -15,7 +15,7 @@ PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
 dotenv.load_dotenv(os.path.join(PROJECT_PATH, ".env"))
 
 BASE_DIR        = os.path.dirname(os.path.dirname(__file__))
-SITE_URL        = "http://music.jamiecounsell.com/"
+SITE_URL        = unicode(os.environ.get("SITE_URL"))
 DOWNLOAD_URL    = "download/"
 
 # Let's get dem environment variables

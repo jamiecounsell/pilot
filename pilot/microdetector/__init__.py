@@ -1,3 +1,4 @@
+# https://github.com/alsocollective/dotdotdash/tree/master/microdetector
 
 from useragents import search_strings
 
