@@ -2,9 +2,11 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.template import Context
 from django.conf import settings
+from django.db.models.query import EmptyQuerySet
 from albums.models import Track, BonusContent
 from albums.utilities import trackSort
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+
 import zipfile, StringIO, os
 
 def sendPurchaseEmail(template, context, purchase):
@@ -27,6 +29,9 @@ def zipForDownload(album):
 
 	tracks = trackSort(list(Track.objects.filter(album=album)))
 	track_files = [open(f.audio_file.path, 'rb') for f in tracks]
+
+	if isinstance(tracks, EmptyQuerySet):
+		raise Http404
 
 	zipped_file = StringIO.StringIO()
 	with zipfile.ZipFile(zipped_file, 'w') as zip:

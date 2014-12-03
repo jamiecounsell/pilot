@@ -42,9 +42,10 @@ def stream(request, t):
 	return response
 
 def index(request):
-	request_album = Album.objects.get(featured=True)
 	try:
-		a = Album.objects.get(featured=True)
+		a = Album.objects.get(featured=True, hidden=False)
+		if not a:
+			raise Exception
 	except Exception:
 		a = Album.objects.all().order_by('-id')[0]
 
@@ -62,6 +63,7 @@ def album(request, album_slug):
 			tokens[t] = tok
 
 	context =  {"album":album, 
+				"albums":Album.objects.filter(hidden=False),
 				"tracks":tracks, 
 				"tokens":tokens,
 				"stripe_key":settings.STRIPE_PUBLISHABLE_KEY,

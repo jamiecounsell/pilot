@@ -12,7 +12,8 @@ class Album(models.Model):
 	name 		= models.CharField(max_length=100, null=False, blank=False, help_text="Enter the full album name here.")
 	
 	is_single	= models.BooleanField(default=False, verbose_name="Single", help_text="Check this box if the album is a single.")
-	
+	hidden		= models.BooleanField(default=False, null=False, blank=False, verbose_name="Hide Album", help_text="Yes: Album will be hidden from view. No: Album will be visible through its URL and the homepage.")
+
 	cover_art	= models.ImageField(upload_to="cover_art/", validators=[photo_validator])
 	background	= models.ImageField(upload_to="backgrounds/", validators=[photo_validator])
 	
@@ -31,6 +32,10 @@ class Album(models.Model):
 	@property
 	def price_read(self):
 		return '${:,.2f}'.format(self.price)
+
+	@property
+	def absolute_url(self):
+	    return settings.SITE_URL + "/album/" + self.slug
 
 	def readable_name(self):
 		return self.name

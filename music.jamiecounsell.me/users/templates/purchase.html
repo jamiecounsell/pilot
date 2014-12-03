@@ -6,17 +6,19 @@
 			<h1>Thank you!</h1>
 			<h2>Thank you for purchasing {{album.name}}. Download instructions have been sent to {{user_email}}. Please enter the PIN included in the email to start your download.</h2>
 		</div>
+	{% if error %}
+	<div class="alert alert-danger pinerror">
+	<p>{{error}}</p>
 	</div>
+	{% endif %}
+	</div>
+
 	<div id="purchase-album-art-container">
 		<div class="purchase-album-art">
 			<img class="purchase-cover-art-photo"  src="{{album.cover_art.url}}">
 		</div>
 		<div id="purchase-pin-container" >
-			{% if error %}
-			<div class="alert alert-danger error">
-			<p>{{error}}</p>
-			</div>
-			{% endif %}
+
 			<div class="pin">
 			<form autocomplete="off" id="form-pin" method="POST" action="{{url}}">
 				{% csrf_token %}  

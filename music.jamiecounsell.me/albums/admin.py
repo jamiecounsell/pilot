@@ -12,7 +12,7 @@ class TrackInline(admin.TabularInline):
 
 class BonusInline(admin.TabularInline):
 	model = BonusContent
-	min_num = 1
+	min_num = 0
 
 class AlbumAdmin(admin.ModelAdmin):
 	inlines = [TrackInline, BonusInline]

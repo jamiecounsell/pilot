@@ -3,7 +3,24 @@
 {% load staticfiles %}
 {% load albums_extras %}
 
-  <div id="album-art" class="container" style="background-image:url('{{album.background.url}}')">  
+  <div id="album-art" class="container" style="background-image:url('{{album.background.url}}')"> 
+    {% if albums|length > 1 %}
+    <button id="album-menu-button" >
+      <span class="album-menu-icon" style="top:3px;" ></span>
+      <span class="album-menu-icon" style="top:13px;" ></span>
+      <span class="album-menu-icon" style="top:23px;" ></span>
+    </a></button>
+    <div id="album-menu">
+      <h3>More from this artist</h3>
+      <ul>
+      {% for a in albums %}
+      {% if a != album %}
+        <a href="{{a.absolute_url}}"><li><img src="{{a.cover_art.url}}" class="menu-art"><h4>{{a.name}} {% if a.is_single %}[single]{% endif %}</h4></li></a>
+      {% endif %}
+      {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
     <div id="cover-art">
       <img class="cover-art-photo" src="{{album.cover_art.url}}">
     </div>
@@ -140,6 +157,16 @@ document.getElementById('pay-button').addEventListener('click', function(e) {
   e.preventDefault();
 });
   
+$("#album-menu-button").on('click', function() {
+  $("#album-menu").fadeToggle()
+  $(".album-menu-icon").each(function(i, obj) {
+    $(obj).toggleClass("menu-up");
+  });
+  $(".overlay").fadeToggle();
+});
+
+
+
 </script>
 
 
