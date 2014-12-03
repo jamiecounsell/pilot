@@ -11,11 +11,12 @@
       <span class="album-menu-icon" style="top:23px;" ></span>
     </a></button>
     <div id="album-menu">
-      <h3>More from this artist</h3>
+      <h3>Albums by this artist</h3>
       <ul>
+        <a href="#"><li class="menu-selected"><img src="{{album.cover_art.url}}" class="menu-art"><h4>{{album.name}} {% if album.is_single %}[single]{% endif %}<span style="float:right;"><img style="height:20px;opacity:0.5;" src="{% static 'music/img/icn/check.png' %}"></span></h4></li></a>
       {% for a in albums %}
       {% if a != album %}
-        <a href="{{a.absolute_url}}"><li><img src="{{a.cover_art.url}}" class="menu-art"><h4>{{a.name}} {% if a.is_single %}[single]{% endif %}</h4></li></a>
+        <a href="{{a.absolute_url}}"><li><img src="{{a.cover_art.url}}" class="menu-art"><h4>{{a.name}} {% if a.is_single %}[single]{% endif %}  <span style="float:right;"><img style="height:20px;opacity:0.5;" src="{% static 'music/img/icn/arrow.png' %}"></span> </h4></li></a>
       {% endif %}
       {% endfor %}
       </ul>
