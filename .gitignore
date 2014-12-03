@@ -1,6 +1,6 @@
-.pyc
-/media/*
-/static/admin/*
+*.pyc
+media/
+*/static/admin/
 .ssh/
 .pip/
 .virtualenvs/
@@ -12,3 +12,8 @@
 .sqlite*
 *.env
 ip_config.sh
+*.conf
+*.ini
+.lesshst
+.mysql_history
+nginx-notes.txt
