@@ -30,8 +30,6 @@ def zipForDownload(album):
 	tracks = trackSort(list(Track.objects.filter(album=album)))
 	track_files = [open(f.audio_file.path, 'rb') for f in tracks]
 
-	if isinstance(tracks, EmptyQuerySet):
-		raise Http404
 
 	zipped_file = StringIO.StringIO()
 	with zipfile.ZipFile(zipped_file, 'w') as zip:

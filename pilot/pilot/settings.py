@@ -1,5 +1,5 @@
 """
-Django settings for music project.
+Django settings for Pilot project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -89,9 +89,9 @@ MIDDLEWARE_CLASSES = (
     'microdetector.Middleware'
 )
 
-ROOT_URLCONF = 'music.urls'
+ROOT_URLCONF = 'pilot.urls'
 
-WSGI_APPLICATION = 'music.wsgi.application'
+WSGI_APPLICATION = 'pilot.wsgi.application'
 
 
 # Database
