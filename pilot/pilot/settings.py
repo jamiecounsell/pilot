@@ -58,7 +58,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-THIRD_PARTY_APPS = tuple()
+THIRD_PARTY_APPS = ('django_mobile',)
 
 DEFAULT_APPS = (
     'django.contrib.admin',
@@ -86,7 +86,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'microdetector.Middleware'
+    'django_mobile.middleware.MobileDetectionMiddleware',
+    'django_mobile.middleware.SetFlavourMiddleware'
 )
 
 ROOT_URLCONF = 'pilot.urls'
@@ -113,14 +114,16 @@ DATABASES = {
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+    'django_mobile.loader.Loader'
 )
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,'..', 'albums/templates/'),)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.request",
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.i18n",
+    'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.i18n',
+    'django_mobile.context_processors.flavour'
 )
 
 # Internationalization
