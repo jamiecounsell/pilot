@@ -5,7 +5,7 @@ from albums.validators import photo_validator
 from albums.utilities import slugger
 from django.db.models.signals import post_save
 
-import hashlib
+import hashlib, re
 
 class Album(models.Model):
 	add_date 	= models.DateTimeField(auto_now=True, null=False, blank=False, verbose_name="Date created.")
@@ -40,6 +40,10 @@ class Album(models.Model):
 	def readable_name(self):
 		return self.name
 
+	@property
+	def url_encoded_name(self):
+		return re.sub(" ", "%20", self.name)
+
 	def __unicode__(self):
 		return self.readable_name()
 
@@ -51,7 +55,7 @@ class Track(models.Model):
 	name 	= models.CharField(max_length=200, null=False,blank=False, help_text="Track name.")
 	album 	= models.ForeignKey(Album)
 	price 	= models.DecimalField(max_digits=5, null=True, blank=True, decimal_places=2, help_text="Individual price. Leave blank if the track is not to be sold individually.")
-	audio_file = models.FileField(upload_to='tracks/')
+	audio_file = models.FileField(upload_to='tracks/', null=False, blank=False)
 
 	lyrics	= models.TextField(blank=True, null=True)
 

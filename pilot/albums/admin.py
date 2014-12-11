@@ -7,6 +7,7 @@ class TrackInline(admin.TabularInline):
 			'track_number',
 			'name',
 			'lyrics',
+			'audio_file'
 		]
 	min_num = 1
 

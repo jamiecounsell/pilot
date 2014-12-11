@@ -8,7 +8,7 @@
 
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
+    <script src="{% static 'music/js/detectMobile.js' %}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{album.name}}</title>
@@ -22,7 +22,8 @@
       <div class="push"></div>
   	</div>
   	<div class="footer">
-  	    <p>Design by <a href="http://www.jamiecounsell.me/">Jamie Counsell</a></p><p> | </p><p>Admin <a href="/admin/">Login</a></p>
+    <hr style="margin-bottom:8px;">
+  	    <p>Powered by  <a href="https://github.com/jamiecounsell/pilot">Pilot</a></p> <p>|</p> <p>Design by <a href="http://www.jamiecounsell.me/">Jamie Counsell</a></p><p> | </p><p>Admin <a href="/admin/">Login</a></p>
   	</div>
   </body>
 </html>

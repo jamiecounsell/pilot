@@ -3,7 +3,7 @@
 {% load staticfiles %}
 {% load albums_extras %}
 
-  <div id="album-art" class="container" style="background-image:url('{{album.background.url}}')"> 
+  <div id="album-art" class="container"> 
     {% if albums|length > 1 %}
     <button id="album-menu-button" >
       <span class="album-menu-icon" style="top:3px;" ></span>
@@ -28,6 +28,7 @@
   </div>
   <div class="container">
     <div id="social-top" >
+
         <ul>
           <li>
           <!-- Email -->
@@ -51,7 +52,7 @@
           </li>
           <li>
           <!-- Facebook -->
-          <a class="social-icons" href="http://www.facebook.com/sharer.php?u={{ ABS_URL }}/"target="_blank"><img src="{% static 'music/img/icn/facebook.png' %}" alt="Facebook" /></a>
+          <a id="social-fb" class="social-icons" href="http://www.facebook.com/sharer.php?u={{ ABS_URL }}/"target="_blank"><img src="{% static 'music/img/icn/facebook.png' %}" alt="Facebook" /></a>
           </li>  
     </div>
     <div id="album-detail" class="row-fluid">
@@ -108,9 +109,9 @@
       </div>
     </div>
   </div>
-
 <script>
-  function aud_play_pause(_id) {
+
+function aud_play_pause(_id) {
   var audio = document.getElementById("music-" + _id.toString());
   var playPause = document.getElementById("button-"+ _id.toString())
   if (audio.paused) {
@@ -168,8 +169,12 @@ $("#album-menu-button").on('click', function() {
   $(".overlay").fadeToggle();
 });
 
-
-
+// Create new image to load bg into
+$('<img/>').attr('src', '{{album.background.url}}').load(function() {
+   $(this).remove(); // prevent memory leaks
+   // fade in bg img when all is loaded
+   $('#album-art').css('background-image', "url('{{album.background.url}}')").animate({ opacity: 1 }, { duration: 700 });
+});
 </script>
 
 
