@@ -21,7 +21,7 @@ DOWNLOAD_URL    = "download/"
 # Let's get dem environment variables
 
 # Django Variable
-VAR_DEBUG           = bool(os.getenv("DEBUG", True))
+VAR_DEBUG           = True if bool(os.getenv("DEBUG", "True")) in ["True", "true", "yes", "y", "1"] else False
 DJANGO_SECRET       = unicode(os.environ.get("DJANGO_SECRET_KEY"))
 
 # Email Variables
