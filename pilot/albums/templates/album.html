@@ -77,7 +77,7 @@
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
               <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>
-              {% if track.lyrics %}<a class="trackicon" href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)">{% if track.lyrics %}<img src="{% static 'music/img/icn/lyrics.png' %}" class="trackicon">{% endif %}</a>
+              {% if track.lyrics %}<a class="trackicon lyricsicon" href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)">{% if track.lyrics %}<img src="{% static 'music/img/icn/lyrics.png' %}" class="trackicon">{% endif %}</a>
               {% else %} <span class="trackicon"></span>
               {% endif %}
             <h2 class="track-name">

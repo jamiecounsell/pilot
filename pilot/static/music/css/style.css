@@ -280,6 +280,10 @@ h1 {
 	border:0 !important;
 }
 
+.lyricsicon {
+	opacity: 1;
+}
+
 
 #cover-art {
 	margin-top:50px !important;
