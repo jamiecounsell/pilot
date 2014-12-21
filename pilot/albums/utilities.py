@@ -37,5 +37,5 @@ def trackSort( t_list ):
 			t_list[k] = t_list[k - 1]
 			k -= 1
 		t_list[k] = tmp
-	print t_list
+
 	return t_list

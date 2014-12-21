@@ -13,8 +13,6 @@ def sendPurchaseEmail(template, context, purchase):
 	subject	  = "Your " + purchase.album.name + " Digital Download Purchase"
 	from_email, to = settings.DEFAULT_FROM_EMAIL, purchase.email
 
-	print context['album'].background.url
-
 	text_content = render_to_string('email_purchase.txt', context)
 	html_content = render_to_string('email_purchase.html', context)
 

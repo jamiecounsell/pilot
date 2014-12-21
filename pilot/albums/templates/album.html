@@ -173,7 +173,7 @@ $("#album-menu-button").on('click', function() {
 $('<img/>').attr('src', '{{album.background.url}}').load(function() {
    $(this).remove(); // prevent memory leaks
    // fade in bg img when all is loaded
-   $('#album-art').css('background-image', "url('{{album.background.url}}')").animate({ opacity: 1 }, { duration: 700 });
+   $('#album-art').css('background-image', "url('{{album.background.url}}')").animate({ opacity: 1 }, { duration: 500 });
 });
 </script>
 

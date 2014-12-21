@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+h1, h2, h3, h4 {
+	text-align: center;
+}
+
+* {
+	text-align: justify;
+}
+</style>
+
+<div class='container col-md-8 col-md-offset-2' style="margin-top:100px;">
+	<div class='col-md-12'>
+		<h1>Hey there!</h1>
+		<h4>It doesn't look like there's anything here</h4>
+		<div style="margin-top:50px;">
+			<div class='col-md-6'>
+			<h3>If you're a visitor</h3>
+			<p>
+				Come back later! The site owner hasn't had the chance to add content yet. Don't worry, it's on the way! For more information, contact the website administrator or reach out to the <a href="http://github.com/jamiecounsell/pilot">Pilot</a> development team!
+			</p>
+			</div>
+			<div class='col-md-6'>
+			<h3>If you're the site owner</h3>
+			<p>
+				Thanks for installing <a href="http://github.com/jamiecounsell/pilot">Pilot</a>. You're all set to start adding your content. Head on over to the <a href="/admin">admin panel</a> to add your first album. If you have any trouble, feel free to contact the development team, or Pilot's creator, <a href="http://twitter.com/jamie_counsell">@Jamie_Counsell</a>. Happy flying!
+			</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

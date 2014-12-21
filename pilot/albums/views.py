@@ -12,7 +12,7 @@ def stream(request, t):
 	try:
 		token = request.GET.get('tracktoken')
 		token = TrackToken.objects.get(token=token)
-		print request.flavour
+
 		if abs(calendar.timegm(time.gmtime()) - token.date) > 10:
 			token.delete()
 			raise TrackToken.DoesNotExist
@@ -48,14 +48,23 @@ def index(request):
 		if not a:
 			raise Exception
 	except Exception:
-		a = Album.objects.all().order_by('-id')[0]
+		try:
+			a = Album.objects.all().filter(hidden=False).order_by('-id')[0]
+		except IndexError:
+			return no_albums(request)
 
 	return album(request, a.slug)
 
 def album(request, album_slug):
 	album = Album.objects.get(slug=album_slug)
-	if not album:
-		album = Album.objects.all().order_by('-id')[0]
+
+	try:
+		if not album:
+			album = Album.objects.all().order_by('-id')[0]
+	except IndexError:
+		# No albums
+		raise Http404
+
 	tracks = trackSort(list(Track.objects.filter(album=album)))
 	tokens = {}
 	for t in tracks:
@@ -72,3 +81,5 @@ def album(request, album_slug):
 
 	return render_to_response('album.html', context, context_instance=RequestContext(request))
 
+def no_albums(request):
+	return render_to_response('no_albums.html', {})
