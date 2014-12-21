@@ -1,8 +1,11 @@
+{% load analytical %}
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html>
   <head>
+    {% analytical_head_top %}
 
-    {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'music/css/style.css'     %}">
 
@@ -12,9 +15,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{album.name}}</title>
-
+    {% analytical_head_bottom %}
   </head>
   <body>
+  {% analytical_body_top %}
   <div class="overlay"></div>
 
   	<div class="wrapper">
@@ -25,5 +29,6 @@
     <hr style="margin-bottom:8px;">
   	    <p>Powered by  <a href="https://github.com/jamiecounsell/pilot">Pilot</a></p> <p>|</p> <p>Design by <a href="http://www.jamiecounsell.me/">Jamie Counsell</a></p><p> | </p><p>Admin <a href="/admin/">Login</a></p>
   	</div>
+  {% analytical_body_bottom %}
   </body>
 </html>

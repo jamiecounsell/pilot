@@ -42,6 +42,9 @@ VAR_DB_PORT         = unicode(os.environ.get("DB_PORT"))
 STRIPE_SECRET_KEY       = unicode(os.environ.get("STRIPE_SECRET"))
 STRIPE_PUBLISHABLE_KEY  = unicode(os.environ.get("STRIPE_PUBLISH"))
 
+# Google analytics
+GOOGLE_ANALYTICS_PROPERTY_ID = unicode(os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID", ""))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -58,7 +61,10 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-THIRD_PARTY_APPS = ('django_mobile',)
+THIRD_PARTY_APPS = (
+    'django_mobile',
+    'analytical',
+)
 
 DEFAULT_APPS = (
     'django.contrib.admin',
