@@ -80,7 +80,7 @@ def album(request, album_slug):
 				"ABS_URL":settings.SITE_URL + "album/%s" % (album.slug)}
 
 	context = dict(context.items() + globalContext().items())
-	
+
 	return render_to_response('album.html', context, context_instance=RequestContext(request))
 
 def no_albums(request):
@@ -89,7 +89,8 @@ def no_albums(request):
 def globalContext():
 	try: 
 		return {
-			"global_featuredalbum": Album.objects.get(featured=True)
+			"global_featuredalbum": Album.objects.get(featured=True),
+			"global_siteURL":settings.SITE_URL[:-1]
 		}
 	except Exception:
 		return {}

@@ -1,6 +1,6 @@
 {% load analytical %}
 {% load staticfiles %}
-
+{% load thumbnail %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,16 +9,35 @@
     <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'music/css/style.css'     %}">
 
-    <link rel="icon" 
-      type="image/png" 
-      href="{{global_featuredalbum.cover_art.url}}">
+    <link rel="icon" type="image/png" href="{{global_featuredalbum.cover_art.url}}">
 
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="{% static 'music/js/detectMobile.js' %}"></script>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{album.name}}</title>
+    <title>{% if album %}{{album.name}}{% else %}{{global_featuredalbum.name}}{% endif %}</title>
+
+    {% if album %}
+
+      <meta property="og:title" content="{{album.name}}"/>
+      {% thumbnail album.cover_art "300x300" padding=True as im %}
+        <meta property="og:image" content="{{global_siteURL}}{{im.url}}"/>
+      {% endthumbnail %}
+
+    {% else %}
+
+      <meta property="og:title" content="{{global_featuredalbum.name}}"/>
+      {% thumbnail global_featuredalbum.cover_art "300x300" padding=True as im %}
+        <meta property="og:image" content="{{global_siteURL}}{{im.url}}"/>
+      {% endthumbnail %}
+
+    {% endif %}
+    <meta property="og:image:height" content="150" />
+    <meta property="og:description"
+          content="Featured album: {{global_featuredalbum.name}}"/>
+
     {% analytical_head_bottom %}
   </head>
   <body>

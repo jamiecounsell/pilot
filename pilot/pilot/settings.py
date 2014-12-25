@@ -21,7 +21,7 @@ DOWNLOAD_URL    = "download/"
 # Let's get dem environment variables
 
 # Django Variable
-VAR_DEBUG           = True if bool(os.getenv("DEBUG", "True")) in ["True", "true", "yes", "y", "1"] else False
+VAR_DEBUG           = True if os.getenv("DEBUG", "True") in ["True", "true", "yes", "y", "1"] else False
 DJANGO_SECRET       = unicode(os.environ.get("DJANGO_SECRET_KEY"))
 
 # Email Variables
@@ -53,7 +53,9 @@ SECRET_KEY = DJANGO_SECRET
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = VAR_DEBUG
-
+TEMPLATE_DEBUG=VAR_DEBUG
+THUMBNAIL_DEBUG=VAR_DEBUG
+print VAR_DEBUG
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -64,6 +66,7 @@ ALLOWED_HOSTS = ['*']
 THIRD_PARTY_APPS = (
     'django_mobile',
     'analytical',
+    'sorl.thumbnail'
 )
 
 DEFAULT_APPS = (
@@ -131,6 +134,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django_mobile.context_processors.flavour'
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'unix://tmp/memcached.sock',
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
