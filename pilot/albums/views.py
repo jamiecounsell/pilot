@@ -79,7 +79,17 @@ def album(request, album_slug):
 				"stripe_key":settings.STRIPE_PUBLISHABLE_KEY,
 				"ABS_URL":settings.SITE_URL + "album/%s" % (album.slug)}
 
+	context = dict(context.items() + globalContext().items())
+	
 	return render_to_response('album.html', context, context_instance=RequestContext(request))
 
 def no_albums(request):
 	return render_to_response('no_albums.html', {})
+
+def globalContext():
+	try: 
+		return {
+			"global_featuredalbum": Album.objects.get(featured=True)
+		}
+	except Exception:
+		return {}
