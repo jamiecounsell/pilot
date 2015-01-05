@@ -55,8 +55,7 @@ SECRET_KEY = DJANGO_SECRET
 DEBUG = VAR_DEBUG
 TEMPLATE_DEBUG=VAR_DEBUG
 THUMBNAIL_DEBUG=VAR_DEBUG
-print VAR_DEBUG
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = VAR_DEBUG
 
 ALLOWED_HOSTS = ['*']
 
@@ -81,7 +80,8 @@ DEFAULT_APPS = (
 CUSTOM_APPS = (
     'albums',
     'users',
-    'streams'
+    'streams',
+    'tracking'
 )
 
 

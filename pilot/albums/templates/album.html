@@ -74,6 +74,8 @@
         <h1>Track Listing</h1>
         <hr class="underliner">
 
+
+
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
               <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>
@@ -85,13 +87,13 @@
             </h2>
 
             <div class="audio-player" style="display:none;">
-              <audio id="music-{{track.pk}}" controls preload="auto">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" controls preload="auto" ended="audio_fullstop()">
                 <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3">
               </audio>
             </div>
 
             <script>
-            // Fix HTML5 Audio Sprites so they're seekable on iOS
+            // Fix HTML5 Audio Sprites so they're seekable 
             var e = document.getElementById('music-{{track.pk}}')
             e.play()
             e.pause()
@@ -111,10 +113,76 @@
   </div>
 <script>
 
+function check_time_played(_id){
+  var audio = document.getElementById("music-" + _id.toString());
+
+  // Played more than one second
+  if( audio.duration - audio.currentTime >= 1 && !audio.sent1){
+    console.log("start");
+    audio.sent1=true;
+  }
+  // Played more than half
+  if( audio.currentTime / audio.duration >= 0.5 && !audio.sent2){
+    console.log("half");
+    audio.sent2=true;
+  }
+
+  // Played ~entire song
+  if( audio.currentTime / audio.duration >= 0.9 && !audio.sent3){
+    console.log("whole");
+    audio.sent3=true;
+  }
+}
+
+var audio_inteval = null;
+
+function clear_audio_interval() {
+  clearInterval(audio_inteval);
+}
+
+$("audio").each(function() {
+  // Do something when any song ends
+  var self = this;
+  this.addEventListener('ended', function (){
+    // Clear the function being run on interval to avoid memory leak.
+    clear_audio_interval();
+    var elementArray;
+    elementArray = document.getElementsByClassName("track");
+
+    // Pause all songs when any song ends
+    for(var i = 0; i < elementArray.length; i++)
+    {
+        em = document.getElementById("music-" + elementArray[i].id.toString())
+        eb = document.getElementById("button-"+  elementArray[i].id.toString())
+        em.pause();
+        eb.src="{% static 'music/img/icn/play.png' %}"
+    } 
+    // Play next song if there's one available. Seek beginning beforehand.
+    audioArray = document.getElementsByTagName("audio")
+    var current = 0
+    while (audioArray[current] != self) {
+      current = current + 1
+    }
+    try {
+      next = audioArray[current + 1];
+    } catch(err) {
+      next = null;
+    }
+    if (next != null) {
+      console.log(next.trackpk)
+      aud_play_pause(next.id.split("-")[1])
+    }
+  });
+});
+
 function aud_play_pause(_id) {
+  var play = "1"
   var audio = document.getElementById("music-" + _id.toString());
   var playPause = document.getElementById("button-"+ _id.toString())
-  if (audio.paused) {
+
+  if (audio.paused || audio.ended) {
+    // Play track
+    audio_inteval = setInterval(function() {check_time_played(_id)}, 1000)
     var elementArray;
     elementArray = document.getElementsByClassName("track");
     for(var i = 0; i < elementArray.length; i++)
@@ -127,6 +195,8 @@ function aud_play_pause(_id) {
     playPause.src="{% static 'music/img/icn/pause.png' %}"
     audio.play();
   } else {
+    // Pause track
+    clearInterval(audio_inteval)
     playPause.src="{% static 'music/img/icn/play.png' %}"
     audio.pause();
  }

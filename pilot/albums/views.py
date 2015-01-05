@@ -16,10 +16,10 @@ def stream(request, t):
 		if abs(calendar.timegm(time.gmtime()) - token.date) > 10:
 			token.delete()
 			raise TrackToken.DoesNotExist
-		elif token.counter >= 3:
+		elif token.counter >= 4:
 			token.delete()
 			raise TrackToken.DoesNotExist
-		elif not request.flavour == "mobile":
+		elif not request.flavour == "mobile" and token.counter >= 2:
 			token.delete()
 		else:
 			token.counter = token.counter + 1

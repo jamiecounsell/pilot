@@ -8,7 +8,7 @@ import hashlib, random, time, calendar
 class Purchase(models.Model):
 	email = models.CharField(max_length=100, null=True, blank=True, verbose_name="User Email")
 	album = models.ForeignKey(Album)
-	time = models.DateTimeField(auto_now=True)
+	time = models.DateTimeField(auto_now=True, auto_now_add=True)
 
 	download_token = models.CharField(max_length=500, blank=True, null=True)
 	download_pin = models.CharField(max_length=10, blank=True, null=True)
