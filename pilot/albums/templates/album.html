@@ -50,7 +50,11 @@
         <div id="payment-footer">
             <form action="" method="POST">
               {% csrf_token %}  
+              {% if album.released %}
               <button id="pay-button" class="payButton">Purchase Album ({{album.price_read}})</button>
+              {% else %}
+              <button id="pay-button" class="payButton">Available soon for purchase.</button>
+              {% endif %}
             </form>
         </div>
       </div>
@@ -62,7 +66,7 @@
 
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
-              <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>
+              {% if track.audio_file %}<a href="javascript:void(0)" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>{% else %}<span class="trackicon"></span>{% endif %}
             <h2 class="track-name">
               {% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}} {% if track.lyrics %}
             </h2>
@@ -213,6 +217,7 @@ var handler = StripeCheckout.configure({
   }
 });
 
+{% if album.released %}
 document.getElementById('pay-button').addEventListener('click', function(e) {
   // Open Checkout with further options
   handler.open({
@@ -222,6 +227,7 @@ document.getElementById('pay-button').addEventListener('click', function(e) {
   });
   e.preventDefault();
 });
+{% endif %}
 
 // Create new image to load bg into
 $('<img/>').attr('src', '{{album.background.url}}').load(function() {

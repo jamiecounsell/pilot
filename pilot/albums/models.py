@@ -14,7 +14,7 @@ class Album(models.Model):
 	
 	is_single	= models.BooleanField(default=False, verbose_name="Single", help_text="Check this box if the album is a single.")
 	hidden		= models.BooleanField(default=False, null=False, blank=False, verbose_name="Hide Album", help_text="Yes: Album will be hidden from view. No: Album will be visible through its URL and the homepage.")
-
+	released 	= models.BooleanField(default=True, null=False, blank=False, help_text="Check this box if the album is released for sale.")
 	cover_art	= models.ImageField(upload_to="cover_art/", validators=[photo_validator])
 	background	= models.ImageField(upload_to="backgrounds/", validators=[photo_validator])
 	
@@ -58,7 +58,7 @@ class Track(models.Model):
 	name 	= models.CharField(max_length=200, null=False,blank=False, help_text="Track name.")
 	album 	= models.ForeignKey(Album)
 	price 	= models.DecimalField(max_digits=5, null=True, blank=True, decimal_places=2, help_text="Individual price. Leave blank if the track is not to be sold individually.")
-	audio_file = models.FileField(upload_to='tracks/', null=False, blank=False)
+	audio_file = models.FileField(upload_to='tracks/', null=True, blank=True)
 
 	lyrics	= models.TextField(blank=True, null=True)
 
