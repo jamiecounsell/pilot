@@ -1,27 +1,11 @@
-{% extends "layout.html" %}
-{% block content %}
+{% extends "menu-layout.html" %}
+{% block body %}
 {% load staticfiles %}
 {% load albums_extras %}
 
+<div id="m-main">
   <div id="album-art" class="container"> 
-    {% if albums|length > 1 %}
-    <button id="album-menu-button" >
-      <span class="album-menu-icon" style="top:3px;" ></span>
-      <span class="album-menu-icon" style="top:13px;" ></span>
-      <span class="album-menu-icon" style="top:23px;" ></span>
-    </a></button>
-    <div id="album-menu">
-      <h3>Albums By This Artist</h3>
-      <ul>
-        <a href="#"><li class="menu-selected"><img src="{{album.cover_art.url}}" class="menu-art"><h4>{{album.name}} {% if album.is_single %}[single]{% endif %}<span style="float:right;"><img style="height:20px;opacity:0.5;" src="{% static 'music/img/icn/check.png' %}"></span></h4></li></a>
-      {% for a in albums %}
-      {% if a != album %}
-        <a href="{{a.absolute_url}}"><li><img src="{{a.cover_art.url}}" class="menu-art"><h4>{{a.name}} {% if a.is_single %}[single]{% endif %}  <span style="float:right;"><img style="height:20px;opacity:0.5;" src="{% static 'music/img/icn/arrow.png' %}"></span> </h4></li></a>
-      {% endif %}
-      {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
+
     <div id="cover-art">
       <img class="cover-art-photo" src="{{album.cover_art.url}}">
     </div>
@@ -79,12 +63,13 @@
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
               <a href="javascript:void(0)" data-toggle="tooltip" title="Preview" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>
-              {% if track.lyrics %}<a class="trackicon lyricsicon" href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)">{% if track.lyrics %}<img src="{% static 'music/img/icn/lyrics.png' %}" class="trackicon">{% endif %}</a>
-              {% else %} <span class="trackicon"></span>
-              {% endif %}
             <h2 class="track-name">
-              {% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}}
+              {% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}} {% if track.lyrics %}
             </h2>
+            <h3 class="lyrics"> 
+              <a href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)">{% if track.lyrics %}lyrics{% endif %}</a></span>{% endif %}
+            </h3>
+
 
             <div class="audio-player" style="display:none;">
               <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" controls preload="auto" ended="audio_fullstop()">
@@ -111,6 +96,13 @@
       </div>
     </div>
   </div>
+</div>
+<script src="{% static 'music/js/modernizr.custom.js' %}"></script>
+<script src="{% static 'music/js/menu.js' %}"></script>
+    <script>
+      new newMenu( document.getElementById( 'm-menu' ) );
+    </script>
+
 <script>
 
 function check_time_played(_id){
@@ -118,18 +110,18 @@ function check_time_played(_id){
 
   // Played more than one second
   if( audio.duration - audio.currentTime >= 1 && !audio.sent1){
-    console.log("start");
+    //console.log("start");
     audio.sent1=true;
   }
   // Played more than half
   if( audio.currentTime / audio.duration >= 0.5 && !audio.sent2){
-    console.log("half");
+    //console.log("half");
     audio.sent2=true;
   }
 
   // Played ~entire song
   if( audio.currentTime / audio.duration >= 0.9 && !audio.sent3){
-    console.log("whole");
+    //console.log("whole");
     audio.sent3=true;
   }
 }
@@ -230,14 +222,6 @@ document.getElementById('pay-button').addEventListener('click', function(e) {
   });
   e.preventDefault();
 });
-  
-$("#album-menu-button").on('click', function() {
-  $("#album-menu").fadeToggle()
-  $(".album-menu-icon").each(function(i, obj) {
-    $(obj).toggleClass("menu-up");
-  });
-  $(".overlay").fadeToggle();
-});
 
 // Create new image to load bg into
 $('<img/>').attr('src', '{{album.background.url}}').load(function() {
@@ -245,7 +229,20 @@ $('<img/>').attr('src', '{{album.background.url}}').load(function() {
    // fade in bg img when all is loaded
    $('#album-art').css('background-image', "url('{{album.background.url}}')").animate({ opacity: 1 }, { duration: 500 });
 });
+
+function parallax(){
+    var scrolled = $(window).scrollTop();
+    $('#album-art').css('background-position', "left " + (-(scrolled * 0.2)).toString() + 'px');
+}
+$(window).scroll(function(e){
+    parallax();
+});
 </script>
 
+<style>
+.payButton {
+  border-left:15px solid {{album.color}};
+}
+</style>
 
 {% endblock %}

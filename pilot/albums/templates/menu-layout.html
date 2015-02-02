@@ -1,0 +1,356 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% load staticfiles %}
+
+<style>
+*,
+*:after,
+*::before {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+}
+
+@font-face {
+	font-weight: normal;
+	font-style: normal;
+	font-family: 'Glyphicons Halflings';
+	src: url("{% static 'music/fonts/glyphicons-halflings-regular.eot' %}");
+	src: url("{% static 'music/fonts/glyphicons-halflings-regular.eot?#iefix'%}") format('embedded-opentype'), url("{% static 'music/fonts/glyphicons-halflings-regular.woff2'%}") format('woff2'), url("{% static 'music/fonts/glyphicons-halflings-regular.woff'%}") format('woff'), url("{% static '/fonts/glyphicons-halflings-regular.ttf'%}") format('truetype'), url("{% static '/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular'%}") format('svg');
+}
+
+#m-menu {
+  z-index: 1000;
+}
+
+#m-menu .shadow-open{
+  -webkit-box-shadow: 0px 10px 10px 5px rgba(0, 0, 0, .20);
+  -moz-box-shadow:  0px 10px 10px 5px rgba(0, 0, 0, .20);
+  box-shadow:     0px 10px 10px 5px rgba(0, 0, 0, .20);
+}
+
+.m-menu-main,
+.m-menu-main ul {
+		margin: 0;
+		padding: 0;
+		background: white;
+		color: {% if album %}{{album.color}}{% else %}#000{% endif %};
+		list-style: none;
+		text-transform: none;
+		font-weight: 300;
+		font-family: 'Lato', Arial, sans-serif;
+		line-height: 60px;
+}
+
+.m-menu-main {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 60px;
+		border-bottom: 1px solid #DDD;
+		font-size: 13px;
+}
+
+.m-menu-main a {
+		display: block;
+		height: 100%;
+		color: {% if album %}{{album.color}}{% else %}#000{% endif %};
+		text-decoration: none;
+		cursor: pointer;
+}
+
+.no-touch .m-menu-main a:hover,
+.no-touch .m-menu li.m-search-item:hover,
+.no-touch .m-menu li.m-search-item:hover a {
+		background: {% if album %}{{album.color}}{% else %}#000{% endif %};
+		color: white;
+}
+
+.m-menu-main > li {
+		display: block;
+		float: left;
+		height: 100%;
+		border-right: 1px solid #DDD;
+		text-align: center;
+}
+
+/* icon-only trigger (menu item) */
+
+.m-menu-main li.m-trigger {
+		position: relative;
+		width: 60px;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+}
+
+.m-menu-main > li:last-child {
+		float: right;
+		border-right: none;
+		border-left: 1px solid #DDD;
+}
+
+.m-menu-main > li > a {
+		padding: 0 30px;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-weight: bold;
+}
+
+.m-menu-main:after {
+		display: table;
+		clear: both;
+		content: "";
+}
+
+.m-menu-wrapper {
+		position: fixed;
+		top: 60px;
+		bottom: 0;
+		left: 0;
+		overflow: hidden;
+		width: 60px;
+		border-top: 1px solid #DDD;
+		background: white;
+		-webkit-transform: translateX(-60px);
+		-moz-transform: translateX(-60px);
+		transform: translateX(-60px);
+		-webkit-transition: -webkit-transform 0.3s, width 0.3s;
+		-moz-transition: -moz-transform 0.3s, width 0.3s;
+		transition: transform 0.3s, width 0.3s;
+}
+
+.m-scroller {
+		position: absolute;
+		overflow-y: scroll;
+		width: 370px;
+		height: 100%;
+}
+
+.m-menu {
+		border-bottom: 1px solid #DDD;
+		text-align: left;
+		font-size: 18px;
+}
+
+.m-menu li:not(:first-child),
+.m-menu li li {
+		box-shadow: inset 0 1px #DDD
+}
+
+.m-submenu li {
+		overflow: hidden;
+		height: 0;
+		-webkit-transition: height 0.3s;
+		-moz-transition: height 0.3s;
+		transition: height 0.3s;
+}
+
+.m-submenu li a {
+		margin-left:25px;
+		color: {% if album %}{{album.color}}{% else %}#FFF{% endif %};
+		opacity: 0.7;
+}
+
+input.m-search {
+		position: relative;
+		z-index: 10;
+		padding-left: 60px;
+		outline: none;
+		border: none;
+		background: transparent;
+		color: {% if album %}{{album.color}}{% else %}#000{% endif %};
+		font-weight: 300;
+		font-family: 'Lato', Arial, sans-serif;
+		cursor: pointer;
+}
+
+/* placeholder */
+
+.m-search::-webkit-input-placeholder {
+		color: {% if album %}{{album.color}}{% else %}#000{% endif %}
+}
+
+.m-search:-moz-placeholder {
+		color: {% if album %}{{album.color}}{% else %}#000{% endif %}
+}
+
+.m-search::-moz-placeholder {
+		color: {% if album %}{{album.color}}{% else %}#000{% endif %}
+}
+
+.m-search:-ms-input-placeholder {
+		color: {% if album %}{{album.color}}{% else %}#000{% endif %}
+}
+
+/* hide placeholder when active in Chrome */
+
+.m-search:focus::-webkit-input-placeholder,
+.no-touch .m-menu li.m-search-item:hover .m-search:focus::-webkit-input-placeholder {
+		color: transparent
+}
+
+input.m-search:focus {
+		cursor: text
+}
+
+.no-touch .m-menu li.m-search-item:hover input.m-search {
+		color: white
+}
+
+/* placeholder */
+
+.no-touch .m-menu li.m-search-item:hover .m-search::-webkit-input-placeholder {
+		color: white
+}
+
+.no-touch .m-menu li.m-search-item:hover .m-search:-moz-placeholder {
+		color: white
+}
+
+.no-touch .m-menu li.m-search-item:hover .m-search::-moz-placeholder {
+		color: white
+}
+
+.no-touch .m-menu li.m-search-item:hover .m-search:-ms-input-placeholder {
+		color: white
+}
+
+.m-menu-main a.m-icon-search {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 60px;
+}
+
+.m-icon::before {
+		display: inline-block;
+		width: 60px;
+		text-align: center;
+		text-transform: none;
+		font-weight: normal;
+		font-style: normal;
+		font-variant: normal;
+		font-family: 'Glyphicons Halflings';
+		line-height: 1;
+		speak: none;
+		-webkit-font-smoothing: antialiased;
+}
+
+.m-icon-music::before {
+		content:"\e002";
+}
+
+.m-icon-sublist::before {
+		content:"\2212";
+}
+
+
+/* if an icon anchor has a span, hide the span */
+
+.m-icon span {
+		width: 0;
+		height: 0;
+		display: block;
+		overflow: hidden;
+}
+
+.m-icon-menu::before {
+		margin-left: -15px;
+		vertical-align: -2px;
+		width: 30px;
+		height: 3px;
+		background: {% if album %}{{album.color}}{% else %}#000{% endif %};
+		box-shadow: 0 3px white, 0 -6px {% if album %}{{album.color}}{% else %}#000{% endif %}, 0 -9px white, 0 -12px {% if album %}{{album.color}}{% else %}#000{% endif %};
+		content: '';
+}
+
+.no-touch .m-icon-menu:hover::before,
+.no-touch .m-icon-menu.m-selected:hover::before {
+		background: white;
+		box-shadow: 0 3px {% if album %}{{album.color}}{% else %}#000{% endif %}, 0 -6px white, 0 -9px {% if album %}{{album.color}}{% else %}#000{% endif %}, 0 -12px white;
+}
+
+.m-icon-menu.m-selected::before {
+		background: {% if album %}{{album.color}}{% else %}#000{% endif %};
+		box-shadow: 0 3px white, 0 -6px {% if album %}{{album.color}}{% else %}#000{% endif %}, 0 -9px white, 0 -12px {% if album %}{{album.color}}{% else %}#000{% endif %};
+}
+
+/* styles for opening menu */
+
+.m-menu-wrapper.m-open-all,
+.m-menu-wrapper.m-open-part {
+		-webkit-transform: translateX(0px);
+		-moz-transform: translateX(0px);
+		transform: translateX(0px);
+}
+
+.m-menu-wrapper.m-open-all {
+		width: 340px
+}
+
+.m-menu-wrapper.m-open-all .m-submenu li {
+		height: 60px
+}
+
+@media screen and (max-width: 422px) { 
+	.m-menu-wrapper.m-open-all {
+			-webkit-transform: translateX(0px);
+			-moz-transform: translateX(0px);
+			transform: translateX(0px);
+			width: 100%;
+	}
+
+	.m-menu-wrapper.m-open-all .m-scroller {
+			width: 130%
+	}
+}
+
+</style>
+
+<ul id="m-menu" class="m-menu-main">
+        <li class="m-trigger">
+          <a class="m-icon m-icon-menu"><span>Menu</span></a>
+          <nav class="m-menu-wrapper">
+            <div class="m-scroller">
+              <ul class="m-menu">
+                {% if albums|length > 1 %}
+
+	                <li>
+	                  <a class="m-icon m-icon-music">More by this artist</a>
+	                  <ul class="m-submenu">
+	                	{% for a in albums %}
+		      				{% if a != album %}
+                    			<li><a href="{{a.absolute_url}}"><span class="m-icon m-icon-sublist"></span>{{a.name}}{% if a.is_single %} [single]{%endif%}</a></li>
+		                    {% endif %}
+	                    {% endfor %}
+	                  </ul>
+	                </li>
+                {% endif %}
+                <!--
+                <li>
+                  <a class="m-icon m-icon-archive">Archives</a>
+                  <ul class="m-submenu">
+                    <li><a class="m-icon m-icon-article">Articles</a></li>
+                    <li><a class="m-icon m-icon-pictures">Images</a></li>
+                    <li><a class="m-icon m-icon-videos">Videos</a></li>
+                  </ul>
+                </li>
+                -->
+
+              </ul>
+            </div><!-- /m-scroller -->
+          </nav>
+        </li>
+        <li style="float:left !important"><a href="http://jamiecounsell.me/"><span>Jamie Counsell</span></a></li>
+      </ul>
+ <script src="{% static 'music/js/classie.js' %}"></script>
+
+{% block body %}{% endblock %}
+
+{% endblock %}

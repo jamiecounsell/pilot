@@ -4,6 +4,7 @@ from albums.fields import ExclusiveBooleanField
 from albums.validators import photo_validator
 from albums.utilities import slugger
 from django.db.models.signals import post_save
+from colorfield.fields import ColorField
 
 import hashlib, re
 
@@ -24,6 +25,8 @@ class Album(models.Model):
 	price 		= models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Price ($)", help_text="Please enter a price. Dollars and cents can be used (ie. 4.99).")
 	
 	slug 		= models.SlugField(max_length=200, unique=True, null=True, blank=True)
+
+	color		= ColorField()#RGBColorField(verbose_name="Theme color")
 
 	@property
 	def price_incents(self):

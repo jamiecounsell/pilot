@@ -6,7 +6,8 @@
   <head>
     {% analytical_head_top %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap-theme.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'music/css/style.css'     %}">
 
     <link rel="icon" type="image/png" href="{{global_featuredalbum.cover_art.url}}">
@@ -42,7 +43,6 @@
   </head>
   <body>
   {% analytical_body_top %}
-  <div class="overlay"></div>
 
   	<div class="wrapper">
     		{% block content %}{% endblock %}
@@ -51,7 +51,6 @@
   	<div class="footer">
     <hr style="margin-bottom:8px;">
   	    <p>Powered by  <a href="https://github.com/jamiecounsell/pilot">Pilot</a></p> <p>|</p> <p>Design by <a href="http://www.jamiecounsell.me/">Jamie Counsell</a></p><p> | </p><p>Admin <a href="/admin/">Login</a></p>
-  	</div>
   {% analytical_body_bottom %}
   </body>
 </html>

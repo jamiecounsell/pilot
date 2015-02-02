@@ -63,9 +63,10 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 THIRD_PARTY_APPS = (
+    'colorfield',
     'django_mobile',
     'analytical',
-    'sorl.thumbnail'
+    'sorl.thumbnail',
 )
 
 DEFAULT_APPS = (

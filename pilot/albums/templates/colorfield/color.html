@@ -1,0 +1,5 @@
+{% load staticfiles %}
+<input type="text" name="{{ name }}" value="{{ value }}" id="{{ attrs.id }}"
+class="colorfield_field"/>
+<script src="{% static 'colorfield/jscolor/jscolor.js' %}"></script>
+<script>!function() { jscolor.init(); }()</script>
