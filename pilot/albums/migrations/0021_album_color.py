@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='album',
             name='color',
-            field=albums.utilities.ColorField(default='', max_length=10),
+            field=models.CharField(default='', max_length=10),
             preserve_default=False,
         ),
     ]
