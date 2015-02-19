@@ -83,7 +83,7 @@
             </h3>
 
             <div class="audio-player" style="display:none;">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" controls preload="metadata" ended="audio_fullstop()">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" controls preload="auto" ended="audio_fullstop();return false;">
                 <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3">
               </audio>
             </div>
@@ -91,8 +91,8 @@
             <script>
             // Fix HTML5 Audio Sprites so they're seekable 
             var e = document.getElementById('music-{{track.pk}}')
-            e.play()
-            e.pause()
+            e.play();
+            e.pause();
             e.addEventListener("canplay", function() {
               promises.push(e);
               $("#playpause-{{track.pk}}").animate({"opacity": 0.65}, 400);
@@ -101,6 +101,10 @@
                 $("#track-listing-loader").fadeOut(500);
               }
             });
+            if (isMobile.any()){
+              var p = new Event('canplay');
+              e.dispatchEvent(p);
+            }
             </script>
           </div>
           <hr>
