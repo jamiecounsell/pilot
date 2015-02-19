@@ -62,11 +62,16 @@
         <h1>Track Listing</h1>
         <hr class="underliner">
 
-
-
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
-              {% if track.audio_file %}<a id = "playpause-{{track.pk}}" href="javascript:void(0)" class="disabled" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>{% else %}<span class="trackicon"></span>{% endif %}
+              {% if track.audio_file %}
+                <a id = "playpause-{{track.pk}}" href="javascript:void(0)" class="disabled" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}});return false;">
+                  <img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon">
+                  <img style="display:none" src="{% static 'music/img/icn/pause.png' %}">
+                </a>
+              {% else %}
+                <span class="trackicon"></span>
+              {% endif %}
             <h2 class="track-name">
               {% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}} {% if track.lyrics %}
             </h2>
@@ -76,7 +81,7 @@
 
 
             <div class="audio-player" style="display:none;">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" controls preload="auto" ended="audio_fullstop()">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" controls preload="metadata" ended="audio_fullstop()">
                 <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3">
               </audio>
             </div>

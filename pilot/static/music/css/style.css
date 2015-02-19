@@ -150,6 +150,8 @@ h1 {
 .track a {
 	height:20px;
 	margin-top:10px;
+	text-decoration: none;
+
 }
 
 .track .disabled {
