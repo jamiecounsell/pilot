@@ -171,7 +171,7 @@ $("audio").each(function() {
         em = document.getElementById("music-" + elementArray[i].id.toString())
         eb = document.getElementById("button-"+  elementArray[i].id.toString())
         em.pause();
-        eb.src = _pause.src;
+        eb.src = _play.src;
     } 
     // Play next song if there's one available. Seek beginning beforehand.
     audioArray = document.getElementsByTagName("audio")
