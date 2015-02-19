@@ -66,7 +66,7 @@
 
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
-              {% if track.audio_file %}<a href="javascript:void(0)" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>{% else %}<span class="trackicon"></span>{% endif %}
+              {% if track.audio_file %}<a id = "playpause-{{track.pk}}" href="javascript:void(0)" class="disabled" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}})"><img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon"></a>{% else %}<span class="trackicon"></span>{% endif %}
             <h2 class="track-name">
               {% if not album.is_single %}{{ forloop.counter }}. {% endif %}{{track.name}} {% if track.lyrics %}
             </h2>
@@ -86,6 +86,7 @@
             var e = document.getElementById('music-{{track.pk}}')
             e.play()
             e.pause()
+            $("#playpause-{{track.pk}}").removeClass("disabled")
             </script>
           </div>
           <hr>
