@@ -59,15 +59,18 @@
         </div>
       </div>
       <div id="track-listing" class="col-md-8">
-        <h1>Track Listing</h1>
+        <h1>Track Listing <span id="track-listing-loader" class="spinner" style=""></span></h1>
         <hr class="underliner">
+
+        <script>
+        var promises = [];
+        </script>
 
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
               {% if track.audio_file %}
                 <a id = "playpause-{{track.pk}}" href="javascript:void(0)" class="disabled" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}});return false;">
                   <img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon">
-                  <img style="display:none" src="{% static 'music/img/icn/pause.png' %}">
                 </a>
               {% else %}
                 <span class="trackicon"></span>
@@ -78,7 +81,6 @@
             <h3 class="lyrics"> 
               <a href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)">{% if track.lyrics %}lyrics{% endif %}</a></span>{% endif %}
             </h3>
-
 
             <div class="audio-player" style="display:none;">
               <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" controls preload="metadata" ended="audio_fullstop()">
@@ -91,7 +93,14 @@
             var e = document.getElementById('music-{{track.pk}}')
             e.play()
             e.pause()
-            $("#playpause-{{track.pk}}").removeClass("disabled")
+            e.addEventListener("canplay", function() {
+              promises.push(e);
+              $("#playpause-{{track.pk}}").animate({"opacity": 0.65}, 400);
+              $("#playpause-{{track.pk}}").removeClass("disabled");
+              if (promises.length >= {{tracks|length}}) {
+                $("#track-listing-loader").fadeOut(500);
+              }
+            });
             </script>
           </div>
           <hr>
@@ -114,6 +123,11 @@
     </script>
 
 <script>
+
+var pause = new Image();
+pause.src = "{% static 'music/img/icn/pause.png' %}";
+var play = new Image();
+play.src = "{% static 'music/img/icn/play.png' %}";
 
 function check_time_played(_id){
   var audio = document.getElementById("music-" + _id.toString());
@@ -157,7 +171,7 @@ $("audio").each(function() {
         em = document.getElementById("music-" + elementArray[i].id.toString())
         eb = document.getElementById("button-"+  elementArray[i].id.toString())
         em.pause();
-        eb.src="{% static 'music/img/icn/play.png' %}"
+        eb.src = pause.src;
     } 
     // Play next song if there's one available. Seek beginning beforehand.
     audioArray = document.getElementsByTagName("audio")
@@ -192,14 +206,14 @@ function aud_play_pause(_id) {
         em = document.getElementById("music-" + elementArray[i].id.toString())
         eb = document.getElementById("button-"+  elementArray[i].id.toString())
         em.pause();
-        eb.src="{% static 'music/img/icn/play.png' %}"
+        eb.src = play.src;
     }  
-    playPause.src="{% static 'music/img/icn/pause.png' %}"
+    playPause.src = pause.src;
     audio.play();
   } else {
     // Pause track
     clearInterval(audio_inteval)
-    playPause.src="{% static 'music/img/icn/play.png' %}"
+    playPause.src = play.src;
     audio.pause();
  }
 }
