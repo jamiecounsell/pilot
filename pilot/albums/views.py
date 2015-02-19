@@ -56,32 +56,32 @@ def index(request):
 	return album(request, a.slug)
 
 def album(request, album_slug):
-	album = Album.objects.get(slug=album_slug)
-
 	try:
-		if not album:
-			album = Album.objects.all().order_by('-id')[0]
-	except IndexError:
-		# No albums
+		album = Album.objects.get(slug=album_slug)
+	except Album.DoesNotExist:
 		raise Http404
 
-	tracks = trackSort(list(Track.objects.filter(album=album)))
-	tokens = {}
-	for t in tracks:
-			tok = TrackToken(track=t, date=calendar.timegm(time.gmtime()), counter=0)
-			tok.save()
-			tokens[t] = tok
+	if album.hidden and not request.user.is_staff:
+		raise Http404
 
-	context =  {"album":album, 
-				"albums":Album.objects.filter(hidden=False),
-				"tracks":tracks, 
-				"tokens":tokens,
-				"stripe_key":settings.STRIPE_PUBLISHABLE_KEY,
-				"ABS_URL":settings.SITE_URL + "album/%s" % (album.slug)}
+	else:
+		tracks = trackSort(list(Track.objects.filter(album=album)))
+		tokens = {}
+		for t in tracks:
+				tok = TrackToken(track=t, date=calendar.timegm(time.gmtime()), counter=0)
+				tok.save()
+				tokens[t] = tok
 
-	context = dict(context.items() + globalContext().items())
+		context =  {"album":album, 
+					"albums":Album.objects.all(),
+					"tracks":tracks, 
+					"tokens":tokens,
+					"stripe_key":settings.STRIPE_PUBLISHABLE_KEY,
+					"ABS_URL":settings.SITE_URL + "album/%s" % (album.slug)}
 
-	return render_to_response('album.html', context, context_instance=RequestContext(request))
+		context = dict(context.items() + globalContext().items())
+
+		return render_to_response('album.html', context, context_instance=RequestContext(request))
 
 def no_albums(request):
 	return render_to_response('no_albums.html', {})

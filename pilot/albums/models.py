@@ -41,7 +41,7 @@ class Album(models.Model):
 	    return settings.SITE_URL + "/album/" + self.slug
 
 	def readable_name(self):
-		return self.name
+		return self.name + " [single]" if self.is_single else self.name
 
 	@property
 	def url_encoded_name(self):

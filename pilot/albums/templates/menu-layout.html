@@ -325,8 +325,8 @@ input.m-search:focus {
 	                  <a class="m-icon m-icon-music">More by this artist</a>
 	                  <ul class="m-submenu">
 	                	{% for a in albums %}
-		      				{% if a != album and not album.hide_album %}
-                    			<li><a href="{{a.absolute_url}}"><span class="m-icon m-icon-sublist"></span>{{a.name}}{% if a.is_single %} [single]{%endif%}</a></li>
+              				{% if a != album and not a.hidden or a != album and request.user.is_active and request.user.is_staff %}
+                    			<li><a href="{{a.absolute_url}}"><span class="m-icon m-icon-sublist"></span>{{a.name}}{% if a.is_single %} [single]{%endif%}{% if a.hidden and request.user.is_active and request.user.is_staff %} [HIDDEN]{% endif %}</a></li>
 		                    {% endif %}
 	                    {% endfor %}
 	                  </ul>
