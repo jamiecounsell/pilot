@@ -124,10 +124,10 @@
 
 <script>
 
-var pause = new Image();
-pause.src = "{% static 'music/img/icn/pause.png' %}";
-var play = new Image();
-play.src = "{% static 'music/img/icn/play.png' %}";
+var _pause = new Image();
+_pause.src = "{% static 'music/img/icn/pause.png' %}";
+var _play = new Image();
+_play.src = "{% static 'music/img/icn/play.png' %}";
 
 function check_time_played(_id){
   var audio = document.getElementById("music-" + _id.toString());
@@ -171,7 +171,7 @@ $("audio").each(function() {
         em = document.getElementById("music-" + elementArray[i].id.toString())
         eb = document.getElementById("button-"+  elementArray[i].id.toString())
         em.pause();
-        eb.src = pause.src;
+        eb.src = _pause.src;
     } 
     // Play next song if there's one available. Seek beginning beforehand.
     audioArray = document.getElementsByTagName("audio")
@@ -206,14 +206,14 @@ function aud_play_pause(_id) {
         em = document.getElementById("music-" + elementArray[i].id.toString())
         eb = document.getElementById("button-"+  elementArray[i].id.toString())
         em.pause();
-        eb.src = play.src;
+        eb.src = _play.src;
     }  
-    playPause.src = pause.src;
+    playPause.src = _pause.src;
     audio.play();
   } else {
     // Pause track
     clearInterval(audio_inteval)
-    playPause.src = pause.src;
+    playPause.src = _pause.src;
     audio.pause();
  }
 }
