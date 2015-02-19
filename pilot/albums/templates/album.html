@@ -95,7 +95,7 @@
             e.pause();
             e.addEventListener("canplay", function() {
               promises.push(e);
-              $("#playpause-{{track.pk}}").animate({"opacity": 0.65}, 400);
+              $("#playpause-{{track.pk}}").animate({"opacity": 0.65}, 300);
               $("#playpause-{{track.pk}}").removeClass("disabled");
               if (promises.length >= {{tracks|length}}) {
                 $("#track-listing-loader").fadeOut(500);
