@@ -16,6 +16,8 @@ dotenv.load_dotenv(os.path.join(PROJECT_PATH, ".env"))
 
 BASE_DIR        = os.path.dirname(os.path.dirname(__file__))
 SITE_URL        = unicode(os.environ.get("SITE_URL"))
+STATIC_SITE_URL = unicode(os.environ.get("STATIC_SITE_URL"))
+MEDIA_SITE_URL = unicode(os.environ.get("MEDIA_SITE_URL"))
 DOWNLOAD_URL    = "download/"
 
 # Let's get dem environment variables
@@ -160,8 +162,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+STATIC_URL = STATIC_SITE_URL[:-1] + '/static/'
+MEDIA_URL = MEDIA_SITE_URL[:-1] + '/media/'
 MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'media'))
 STATIC_ROOT = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'static'))
 

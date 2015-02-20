@@ -38,7 +38,7 @@ class Album(models.Model):
 
 	@property
 	def absolute_url(self):
-	    return settings.SITE_URL + "/album/" + self.slug
+	    return settings.SITE_URL + "album/" + self.slug
 
 	def readable_name(self):
 		return self.name + " [single]" if self.is_single else self.name

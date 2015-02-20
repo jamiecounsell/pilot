@@ -59,7 +59,7 @@
         </div>
       </div>
       <div id="track-listing" class="col-md-8">
-        <h1>Track Listing</h1>
+        <h1>Track Listing <span id="track-listing-loader" class="spinner" style=""> </span> <span id="spinner-text">Loading Tracks</span></h1>
         <hr class="underliner">
 
         <script>
@@ -83,8 +83,7 @@
             </h3>
 
             <div class="audio-player" style="">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" preload="none" ended="audio_fullstop();return false;">
-                <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" preload="none" type="audio/mp3">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" src="" target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3" preload="metadata" ended="audio_fullstop();return false;">
               </audio>
             </div>
             
@@ -93,7 +92,7 @@
             var e = document.getElementById('music-{{track.pk}}')
             e.play();
             e.pause();
-            e.addEventListener("canplay", function() {
+            //e.addEventListener("canplay", function() {
               promises.push(e);
               $("#playpause-{{track.pk}}").animate({"opacity": 0.65}, 300);
               $("#playpause-{{track.pk}}").removeClass("disabled");
@@ -101,13 +100,13 @@
                 $("#track-listing-loader").fadeOut(500);
                 $("#spinner-text").fadeOut(500);
               }
-            });
+            //});
             if (isMobile.any()){
               var p = new Event('canplay');
               e.dispatchEvent(p);
             }
             </script>
-            {% endif %}
+
           </div>
           <hr>
           {% if track.lyrics %}
@@ -201,6 +200,12 @@ function aud_play_pause(_id) {
   var play = "1"
   var audio = document.getElementById("music-" + _id.toString());
   var playPause = document.getElementById("button-"+ _id.toString())
+
+  if ($("#music-" + _id.toString()).attr('src') == "" || $("#music-" + _id.toString()).attr('src') ==null) {
+    alert('hi');
+    $("#music-" + _id.toString()).attr('src', $("#music-" + _id.toString()).attr('target'));
+    audio.load();
+  }
 
   if (audio.paused || audio.ended) {
     // Play track

@@ -12,22 +12,16 @@ def stream(request, t):
 	try:
 		token = request.GET.get('tracktoken')
 		token = TrackToken.objects.get(token=token)
-
-		if abs(calendar.timegm(time.gmtime()) - token.date) > 10:
+		if token.counter >= 4:
 			token.delete()
-			raise TrackToken.DoesNotExist
-		elif token.counter >= 4:
-			token.delete()
-			raise TrackToken.DoesNotExist
 		elif not request.flavour == "mobile" and token.counter >= 2:
 			token.delete()
 		else:
 			token.counter = token.counter + 1
 			token.save()
-
 		if not token:
-			raise KeyError
-	except (KeyError, TrackToken.DoesNotExist) as e:
+			raise TrackToken.DoesNotExist
+	except TrackToken.DoesNotExist:
 		return HttpResponseForbidden()
 
 	try:
@@ -37,8 +31,9 @@ def stream(request, t):
 
 	response = HttpResponse()
 	response['Content-Type'] = 'audio/mp3'
+	print track.audio_file
 	response['Content-Disposition'] = 'attachment; filename=%s' % (track.audio_file, )
-	response['X-Accel-Redirect'] = '%s' % (track.audio_file.url, )
+	response['X-Accel-Redirect'] = '/protected/%s' % (track.audio_file.name, )
 	
 	return response
 
