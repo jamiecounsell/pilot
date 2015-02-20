@@ -71,8 +71,8 @@
               {% if track.audio_file %}
               <span class="trackicon">
                 <a id = "playpause-{{track.pk}}" href="javascript:void(0)" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}});return false;">
-                  <img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon">
-                  {% if not mobile %}<span id="track-loader-{{track.pk}}" class="spinner" style="display:none;"> </span>{% endif %}
+                  {% if not mobile %}<img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon">
+                  <span id="track-loader-{{track.pk}}" class="spinner" style="display:none;"> </span>{% endif %}
                 </a>
                 </span>
               {% else %}
@@ -86,8 +86,8 @@
             </h3>
 
             <div class="audio-player" style="display:none;">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" controls preload="auto" ended="audio_fullstop()">
-                <source src="{% if mobile %}/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}{% endif %}" type="audio/mp3">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" {% if not mobile %}target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}"{% endif %} controls preload="metadata" ended="audio_fullstop()">
+                <source src="{% if mobile %}/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}{% endif %}" type="audio/mpeg">
               </audio>
             </div>
             
