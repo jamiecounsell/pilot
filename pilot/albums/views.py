@@ -71,6 +71,7 @@ def album(request, album_slug):
 					"albums":Album.objects.all(),
 					"tracks":tracks, 
 					"tokens":tokens,
+					"mobile":request.flavour == "mobile",
 					"stripe_key":settings.STRIPE_PUBLISHABLE_KEY,
 					"ABS_URL":settings.SITE_URL + "album/%s" % (album.slug)}
 

@@ -59,7 +59,7 @@
         </div>
       </div>
       <div id="track-listing" class="col-md-8">
-        <h1>Track Listing</h1>
+        <h1>Track Listing {{mobile}}</h1>
         <hr class="underliner">
 
         <script>
@@ -72,7 +72,7 @@
               <span class="trackicon">
                 <a id = "playpause-{{track.pk}}" href="javascript:void(0)" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}});return false;">
                   <img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon">
-                  <span id="track-loader-{{track.pk}}" class="spinner" style="display:none;"> </span>
+                  {% if not mobile %}<span id="track-loader-{{track.pk}}" class="spinner" style="display:none;"> </span>{% endif %}
                 </a>
                 </span>
               {% else %}
@@ -86,7 +86,7 @@
             </h3>
 
             <div class="audio-player" style="">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" src="" target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3" preload="none" ended="audio_fullstop();return false;">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" src="{% if mobile %}/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}{%endif%}" target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3" preload="none" ended="audio_fullstop();return false;">
               </audio>
             </div>
             
@@ -208,12 +208,14 @@ function aud_play_pause(_id) {
   var audio = document.getElementById("music-" + _id.toString());
   var playPause = document.getElementById("button-"+ _id.toString())
 
+  {% if not mobile %}
   if ($("#music-" + _id.toString()).attr('src') == "" || $("#music-" + _id.toString()).attr('src') ==null) {
     $("#music-" + _id.toString()).attr('src', $("#music-" + _id.toString()).attr('target'));
     var e = new Event('_load')
     audio.dispatchEvent(e);
     audio.load();
   }
+  {% endif %}
 
   if (audio.paused || audio.ended) {
     // Play track
