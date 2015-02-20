@@ -59,7 +59,7 @@
         </div>
       </div>
       <div id="track-listing" class="col-md-8">
-        <h1>Track Listing <span id="track-listing-loader" class="spinner" style=""> </span> <span id="spinner-text">Loading Tracks</span></h1>
+        <h1>Track Listing</h1>
         <hr class="underliner">
 
         <script>
@@ -69,9 +69,12 @@
         {% for track in tracks %}
           <div id="{{track.pk}}" class="track">
               {% if track.audio_file %}
-                <a id = "playpause-{{track.pk}}" href="javascript:void(0)" class="disabled" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}});return false;">
+              <span class="trackicon">
+                <a id = "playpause-{{track.pk}}" href="javascript:void(0)" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}});return false;">
                   <img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon">
+                  <span id="track-loader-{{track.pk}}" class="spinner" style="display:none;"> </span>
                 </a>
+                </span>
               {% else %}
                 <span class="trackicon"></span>
               {% endif %}
@@ -83,7 +86,7 @@
             </h3>
 
             <div class="audio-player" style="">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" src="" target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3" preload="metadata" ended="audio_fullstop();return false;">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" src="" target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3" preload="none" ended="audio_fullstop();return false;">
               </audio>
             </div>
             
@@ -92,15 +95,19 @@
             var e = document.getElementById('music-{{track.pk}}')
             e.play();
             e.pause();
-            //e.addEventListener("canplay", function() {
+            e.addEventListener("_load", function() {
+              $("#button-{{track.pk}}").toggle();
+              $("#track-loader-{{track.pk}}").toggle();
+
+            })
+
+            e.addEventListener("canplay", function() {
               promises.push(e);
               $("#playpause-{{track.pk}}").animate({"opacity": 0.65}, 300);
               $("#playpause-{{track.pk}}").removeClass("disabled");
-              if (promises.length >= {{tracks|length}}) {
-                $("#track-listing-loader").fadeOut(500);
-                $("#spinner-text").fadeOut(500);
-              }
-            //});
+                $("#track-loader-{{track.pk}}").toggle();
+                $("#button-{{track.pk}}").fadeIn(300);
+            });
             if (isMobile.any()){
               var p = new Event('canplay');
               e.dispatchEvent(p);
@@ -202,8 +209,9 @@ function aud_play_pause(_id) {
   var playPause = document.getElementById("button-"+ _id.toString())
 
   if ($("#music-" + _id.toString()).attr('src') == "" || $("#music-" + _id.toString()).attr('src') ==null) {
-    alert('hi');
     $("#music-" + _id.toString()).attr('src', $("#music-" + _id.toString()).attr('target'));
+    var e = new Event('_load')
+    audio.dispatchEvent(e);
     audio.load();
   }
 
