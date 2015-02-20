@@ -59,7 +59,7 @@
         </div>
       </div>
       <div id="track-listing" class="col-md-8">
-        <h1>Track Listing <span id="track-listing-loader" class="spinner" style=""></span></h1>
+        <h1>Track Listing <span id="track-listing-loader" class="spinner" style=""></span><span id="track-listing-loader-text">Loading Tracks</span></h1>
         <hr class="underliner">
 
         <script>
@@ -99,6 +99,7 @@
               $("#playpause-{{track.pk}}").removeClass("disabled");
               if (promises.length >= {{tracks|length}}) {
                 $("#track-listing-loader").fadeOut(500);
+                $("#track-listing-loader-text").fadeOut(500);
               }
             });
             if (isMobile.any()){

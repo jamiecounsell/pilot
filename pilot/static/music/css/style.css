@@ -5,6 +5,7 @@
 	outline:none;
 }
 html, body {
+	
 	font-family: 'Lato', Arial, sans-serif;
 
 	height: 100%;
@@ -401,4 +402,10 @@ h1 {
     border-top-color: rgba(0, 0, 0, .6);
     animation: spinner .6s linear infinite;
     -webkit-animation: spinner .6s linear infinite;
+}
+
+#track-listing-loader-text {
+	opacity: 0.5;
+	margin-left:50px;
+	font-size: 20px;
 }
