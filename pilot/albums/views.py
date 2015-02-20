@@ -33,8 +33,8 @@ def stream(request, t):
 	response['Content-Type'] = 'audio/mp3'
 	print track.audio_file
 	response['Content-Disposition'] = 'attachment; filename=%s' % (track.audio_file, )
-	response['X-Accel-Redirect'] = '/protected/%s' % (track.audio_file.name, )
-	
+	response['X-Accel-Redirect'] = '%s' % (track.audio_file.url, )	
+	response['Content-Length'] = len(response.content)
 	return response
 
 def index(request):

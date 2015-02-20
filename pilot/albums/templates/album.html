@@ -59,7 +59,7 @@
         </div>
       </div>
       <div id="track-listing" class="col-md-8">
-        <h1>Track Listing {{mobile}}</h1>
+        <h1>Track Listing</h1>
         <hr class="underliner">
 
         <script>
@@ -85,8 +85,9 @@
               <a href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)">{% if track.lyrics %}lyrics{% endif %}</a></span>{% endif %}
             </h3>
 
-            <div class="audio-player" style="">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" src="{% if mobile %}/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}{%endif%}" target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3" preload="none" ended="audio_fullstop();return false;">
+            <div class="audio-player" style="display:none;">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" controls preload="auto" ended="audio_fullstop()">
+                <source src="{% if mobile %}/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}{% endif %}" type="audio/mp3">
               </audio>
             </div>
             
@@ -95,12 +96,12 @@
             var e = document.getElementById('music-{{track.pk}}')
             e.play();
             e.pause();
+            {% if not mobile %}
             e.addEventListener("_load", function() {
               $("#button-{{track.pk}}").toggle();
               $("#track-loader-{{track.pk}}").toggle();
 
             })
-
             e.addEventListener("canplay", function() {
               promises.push(e);
               $("#playpause-{{track.pk}}").animate({"opacity": 0.65}, 300);
@@ -112,6 +113,7 @@
               var p = new Event('canplay');
               e.dispatchEvent(p);
             }
+            {% endif %}
             </script>
 
           </div>
@@ -204,14 +206,14 @@ $("audio").each(function() {
 });
 
 function aud_play_pause(_id) {
-  var play = "1"
+  var play = "1";
   var audio = document.getElementById("music-" + _id.toString());
-  var playPause = document.getElementById("button-"+ _id.toString())
+  var playPause = document.getElementById("button-"+ _id.toString());
 
   {% if not mobile %}
   if ($("#music-" + _id.toString()).attr('src') == "" || $("#music-" + _id.toString()).attr('src') ==null) {
     $("#music-" + _id.toString()).attr('src', $("#music-" + _id.toString()).attr('target'));
-    var e = new Event('_load')
+    var e = new Event('_load');
     audio.dispatchEvent(e);
     audio.load();
   }
