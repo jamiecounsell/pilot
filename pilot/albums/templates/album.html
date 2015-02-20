@@ -59,7 +59,7 @@
         </div>
       </div>
       <div id="track-listing" class="col-md-8">
-        <h1>Track Listing <span id="track-listing-loader" class="spinner" style=""> </span> <span id="spinner-text">Loading Tracks</span></h1>
+        <h1>Track Listing</h1>
         <hr class="underliner">
 
         <script>
@@ -87,7 +87,7 @@
                 <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" preload="none" type="audio/mp3">
               </audio>
             </div>
-            {% if track.audio_file %}
+            
             <script>
             // Fix HTML5 Audio Sprites so they're seekable 
             var e = document.getElementById('music-{{track.pk}}')
