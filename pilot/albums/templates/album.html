@@ -82,12 +82,12 @@
               <a href="javascript:void(0)" title="Lyrics" onclick="$('#lyrics-{{track.pk}}').slideToggle(200)">{% if track.lyrics %}lyrics{% endif %}</a></span>{% endif %}
             </h3>
 
-            <div class="audio-player" style="display:none;">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" controls preload="auto" ended="audio_fullstop();return false;">
-                <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" type="audio/mp3">
+            <div class="audio-player" style="">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" preload="none" ended="audio_fullstop();return false;">
+                <source src="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}" preload="none" type="audio/mp3">
               </audio>
             </div>
-
+            {% if track.audio_file %}
             <script>
             // Fix HTML5 Audio Sprites so they're seekable 
             var e = document.getElementById('music-{{track.pk}}')
@@ -107,6 +107,7 @@
               e.dispatchEvent(p);
             }
             </script>
+            {% endif %}
           </div>
           <hr>
           {% if track.lyrics %}
