@@ -246,6 +246,7 @@ var handler = StripeCheckout.configure({
   key: '{{stripe_key}}',
   image: '{{album.cover_art.url}}',
   token: function(token) {
+      $("#fullpage-loader").toggle();
       $.ajax({
         type: "POST",
         url: '/charge/',
@@ -255,6 +256,7 @@ var handler = StripeCheckout.configure({
                 'album':{{album.pk}}
               },
       }).done(function(response) { 
+        $("#fullpage-loader").toggle();
         window.location.href = response.redirecturl;
       });
   }
