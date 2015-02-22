@@ -37,6 +37,7 @@ def zipForDownload(album):
 			name = tracks[i].name
 			ext = os.path.basename(f.name).split('.')[-1]
 			zip.writestr("{0} - {1}.{2}".format(num, name, ext), f.read())
+			f.close()
 		for i, f in enumerate(bonus_files):
 			name = bonus[i].name
 			ext = os.path.basename(f.name).split('.')[-1]
