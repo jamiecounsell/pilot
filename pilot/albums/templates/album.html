@@ -86,7 +86,7 @@
             </h3>
 
             <div class="audio-player" style="display:none;">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" {% if not mobile %}target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}"{% endif %} controls preload="none" ended="audio_fullstop()">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" {% if not mobile %}target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}"{% endif %} controls preload="metadata" ended="audio_fullstop()">
                 <source src="{% if mobile %}/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}{% endif %}" type="audio/mpeg">
               </audio>
             </div>
@@ -97,22 +97,20 @@
             e.play();
             e.pause();
             {% if not mobile %}
-            e.addEventListener("onloadstart", function(){
-              alert("onloadstart");
+            e.addEventListener("_load", function() {
+              $("#button-{{track.pk}}").toggle();
+              $("#track-loader-{{track.pk}}").toggle();
+
             })
-            e.addEventListener("loadedmetadata", function() {
-              alert("loadedmetadata");
+            e.addEventListener("canplay", function() {
+              promises.push(e);
               $("#playpause-{{track.pk}}").animate({"opacity": 0.65}, 300);
               $("#playpause-{{track.pk}}").removeClass("disabled");
                 $("#track-loader-{{track.pk}}").toggle();
                 $("#button-{{track.pk}}").fadeIn(300);
             });
-             e.addEventListener("_load", function() {
-              $("#button-{{track.pk}}").toggle();
-              $("#track-loader-{{track.pk}}").toggle();
-                })
             if (isMobile.any()){
-              var p = new Event('loadedmetadata');
+              var p = new Event('canplay');
               e.dispatchEvent(p);
             }
             {% endif %}
@@ -215,8 +213,8 @@ function aud_play_pause(_id) {
   {% if not mobile %}
   if ($("#music-" + _id.toString()).attr('src') == "" || $("#music-" + _id.toString()).attr('src') ==null) {
     $("#music-" + _id.toString()).attr('src', $("#music-" + _id.toString()).attr('target'));
-    //var e = new Event('_load');
-    //audio.dispatchEvent(e);
+    var e = new Event('_load');
+    audio.dispatchEvent(e);
     audio.load();
   }
   {% endif %}
