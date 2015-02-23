@@ -2,11 +2,11 @@ from django.db import models
 from django.conf import settings
 from albums.fields import ExclusiveBooleanField
 from albums.validators import photo_validator
-from albums.utilities import slugger
+from albums.utilities import slugger, trackSort
 from django.db.models.signals import post_save
 from colorfield.fields import ColorField
-
 import hashlib, re
+import zipfile, StringIO, os
 
 class Album(models.Model):
 	add_date 	= models.DateTimeField(auto_now=True, null=False, blank=False, verbose_name="Date created.")
@@ -27,6 +27,8 @@ class Album(models.Model):
 	slug 		= models.SlugField(max_length=200, unique=True, null=True, blank=True)
 
 	color		= ColorField()#RGBColorField(verbose_name="Theme color")
+
+	zipfile = models.FileField(null=True, blank=True)
 
 	@property
 	def price_incents(self):
@@ -52,6 +54,33 @@ class Album(models.Model):
 
 	def __str__(self):
 		return self.readable_name()
+
+	def createZipFile(self):
+		print settings.MEDIA_ROOT
+		bonus = BonusContent.objects.filter(album=self.pk)
+		bonus_files = [open(f.bonus_file.path, 'rb') for f in bonus]
+
+		tracks = trackSort(list(Track.objects.filter(album=self.pk)))
+		track_files = [open(f.audio_file.path, 'rb') for f in tracks]
+
+		with zipfile.ZipFile(os.path.join(settings.MEDIA_ROOT, "zip/album_"+str(self.pk)), 'w') as zip:
+			for i, f in enumerate(track_files):
+				f.seek(0)
+				num = tracks[i].track_number
+				name = tracks[i].name
+				ext = os.path.basename(f.name).split('.')[-1]
+				zip.writestr("{0} - {1}.{2}".format(num, name, ext), f.read())
+				f.close()
+			for i, f in enumerate(bonus_files):
+				name = bonus[i].name
+				ext = os.path.basename(f.name).split('.')[-1]
+				zip.writestr("{0}.{1}".format(name, ext), f.read())
+			self.zipfile = os.path.join(settings.MEDIA_ROOT, "zip/album_"+str(self.pk))
+			zip.close()
+
+	def save(self, *args, **kwargs):
+		self.createZipFile()
+		super(Album, self).save(*args, **kwargs)
 
 class Track(models.Model):
 	track_number = models.PositiveSmallIntegerField()
