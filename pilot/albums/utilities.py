@@ -33,8 +33,6 @@ def slugger(sender, **kwargs):
             sender.objects.filter(pk=self.pk).update(slug=_slug)
         except Exception as e:
             print e
-            print "wat"
-
 
 def trackSort(t_list):
     for i in range(1, len(t_list)):

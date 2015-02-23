@@ -71,8 +71,8 @@
               {% if track.audio_file %}
               <span class="trackicon">
                 <a id = "playpause-{{track.pk}}" href="javascript:void(0)" data-toggle="tooltip" title="Listen" onclick="aud_play_pause({{track.pk}});return false;">
-                  {% if not mobile %}<img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon">
-                  <span id="track-loader-{{track.pk}}" class="spinner" style="display:none;"> </span>{% endif %}
+                  <img src="{% static 'music/img/icn/play.png' %}" id="button-{{track.pk}}" class="trackicon">
+                  <span id="track-loader-{{track.pk}}" class="spinner" style="display:none;"> </span>
                 </a>
                 </span>
               {% else %}

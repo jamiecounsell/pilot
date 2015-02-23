@@ -20,42 +20,30 @@ def sendPurchaseEmail(template, context, purchase):
 	msg.attach_alternative(html_content, "text/html")
 	msg.send()
 
+def generateZipResponse(z, album):
+	z_path = os.path.join(settings.MEDIA_URL, os.path.relpath(z.path, settings.MEDIA_ROOT))
+	response = HttpResponse()
+
+	response['Content-Disposition'] = 'attachment; filename=%s' % (album.name)
+	response['Content-Type'] = 'application/octet-stream'
+	response['X-Accel-Redirect'] = '%s' % (z_path, )	
+	return response
+
 def zipForDownload(album):
 
 	try:
-		z = album.z
+		z = album.zipfile
 		if not z:
 			raise Exception
-		response = HttpResponse(zipped_file, content_type='application/octet-stream')
-		response['Content-Disposition'] = 'attachment; filename=%s.zip' % (album.name)
-
+		response = generateZipResponse(z, album)
 	# Fallback if there is no file. TODO clean this up or reuse this function
 	# since the (almost) same function is used in albums.models:Album
 	except Exception:
-		bonus = BonusContent.objects.filter(album=album)
-		bonus_files = [open(f.bonus_file.path, 'rb') for f in bonus]
-
-		tracks = trackSort(list(Track.objects.filter(album=album)))
-		track_files = [open(f.audio_file.path, 'rb') for f in tracks]
-
-
-		zipped_file = StringIO.StringIO()
-		with zipfile.ZipFile(zipped_file, 'w') as zip:
-			for i, f in enumerate(track_files):
-				f.seek(0)
-				num = tracks[i].track_number
-				name = tracks[i].name
-				ext = os.path.basename(f.name).split('.')[-1]
-				zip.writestr("{0} - {1}.{2}".format(num, name, ext), f.read())
-				f.close()
-			for i, f in enumerate(bonus_files):
-				name = bonus[i].name
-				ext = os.path.basename(f.name).split('.')[-1]
-				zip.writestr("{0}.{1}".format(name, ext), f.read())
-
-		zipped_file.seek(0)
-		response = HttpResponse(zipped_file, content_type='application/octet-stream')
-		response['Content-Disposition'] = 'attachment; filename=%s.zip' % (album.name)
+		album.save()
+		z = album.zipfile
+		if not z:
+			raise Exception
+		generateZipResponse(z, album)	
 	return response
 
 

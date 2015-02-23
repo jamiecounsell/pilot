@@ -66,6 +66,7 @@ def downloadPrePin(request, purchase, error):
 	from_site = False
 	try:
 		# Determine if this is a redirect from the site or a click from an email
+		# This doesn't need to be reliable, it's just for aesthetics on the front-end
 		if 'music.jamiecounsell.me' in request.META['HTTP_REFERER'].split('/')\
 		or 'music.jamiecounsell.com' in request.META['HTTP_REFERER'].split('/'):
 			from_site = True

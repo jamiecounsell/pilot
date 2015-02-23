@@ -27,8 +27,17 @@ class AlbumAdmin(admin.ModelAdmin):
 			return common + []
 		else:
 			return common + []
+	def response_add(self, request, new_object):
+		obj = self.post_inline_save(new_object)
+		return super(AlbumAdmin, self).response_add(request, obj)
 
+	def response_change(self, request, obj):
+		obj = self.post_inline_save(obj)
+		return super(AlbumAdmin, self).response_change(request, obj)
 
+	def post_inline_save(self, obj):
+		obj.createZipFile()
+		return obj
 
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(TrackToken)
