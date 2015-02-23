@@ -23,6 +23,7 @@ def stream(request, t):
 		if not token:
 			raise TrackToken.DoesNotExist
 	except TrackToken.DoesNotExist:
+		pass
 		return HttpResponseForbidden()
 
 	try:
