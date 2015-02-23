@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from albums.fields import ExclusiveBooleanField
 from albums.validators import photo_validator
-from albums.utilities import slugger, trackSort, force_zip_update
+from albums.utilities import slugger, trackSort
 from django.db.models.signals import post_save
 from colorfield.fields import ColorField
 from django.core.files import File
@@ -124,5 +124,4 @@ class BonusContent(models.Model):
 	album 	= models.ForeignKey(Album)
 	bonus_file = models.FileField(upload_to='bonus/')
 
-#post_save.connect(force_zip_update, sender=Album)
 post_save.connect(slugger, sender=Album)
