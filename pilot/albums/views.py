@@ -13,13 +13,6 @@ def stream(request, t):
 	try:
 		token = request.GET.get('tracktoken')
 		token = TrackToken.objects.get(token=token)
-		if token.counter >= 5:
-			token.delete()
-		elif not request.flavour == "mobile" and token.counter >= 5:
-			token.delete()
-		else:
-			token.counter = token.counter + 1
-			token.save()
 		if not token:
 			raise TrackToken.DoesNotExist
 	except TrackToken.DoesNotExist:
@@ -35,7 +28,7 @@ def stream(request, t):
 	response['Content-Type'] = 'audio/mp3'
 	response['Content-Disposition'] = 'attachment; filename=%s' % (track.audio_file, )
 	response['X-Accel-Redirect'] = '%s' % (track.audio_file.url, )	
-	response['Content-Length'] = len(response.content)
+	response['Content-Length'] = os.path.getsize(track.audio_file.path)
 	return response
 
 def index(request):

@@ -86,7 +86,7 @@
             </h3>
 
             <div class="audio-player" style="display:none;">
-              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" {% if not mobile %}target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}"{% endif %} controls preload="metadata" ended="audio_fullstop()">
+              <audio id="music-{{track.pk}}" trackpk="{{track.pk}}" {% if not mobile %}target="/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}"{% endif %} controls preload="metadata">
                 <source src="{% if mobile %}/stream/{{track.pk}}/?tracktoken={{tokens|get_token:track}}{% endif %}" type="audio/mpeg">
               </audio>
             </div>
@@ -198,8 +198,7 @@ $("audio").each(function() {
     } catch(err) {
       next = null;
     }
-    if (next != null) {
-      console.log(next.trackpk)
+    if (next != null && !(isMobile.any())) {
       aud_play_pause(next.id.split("-")[1])
     }
   });
