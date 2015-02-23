@@ -9,12 +9,13 @@ from albums.utilities import trackSort
 import os, datetime, calendar, time, json
 
 def stream(request, t):
+	print request
 	try:
 		token = request.GET.get('tracktoken')
 		token = TrackToken.objects.get(token=token)
-		if token.counter >= 4:
+		if token.counter >= 5:
 			token.delete()
-		elif not request.flavour == "mobile" and token.counter >= 2:
+		elif not request.flavour == "mobile" and token.counter >= 5:
 			token.delete()
 		else:
 			token.counter = token.counter + 1
@@ -31,7 +32,6 @@ def stream(request, t):
 
 	response = HttpResponse()
 	response['Content-Type'] = 'audio/mp3'
-	print track.audio_file
 	response['Content-Disposition'] = 'attachment; filename=%s' % (track.audio_file, )
 	response['X-Accel-Redirect'] = '%s' % (track.audio_file.url, )	
 	response['Content-Length'] = len(response.content)

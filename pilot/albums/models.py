@@ -75,6 +75,7 @@ class Album(models.Model):
 				name = bonus[i].name
 				ext = os.path.basename(f.name).split('.')[-1]
 				zip.writestr("{0}.{1}".format(name, ext), f.read())
+				f.close()
 			self.zipfile = os.path.join(settings.MEDIA_ROOT, "zip/album_"+str(self.pk))
 			zip.close()
 
