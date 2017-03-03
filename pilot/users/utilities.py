@@ -24,7 +24,7 @@ def generateZipResponse(z, album):
 	z_path = os.path.join(settings.MEDIA_URL, os.path.relpath(z.path, settings.MEDIA_ROOT))
 	response = HttpResponse()
 
-	response['Content-Disposition'] = 'attachment; filename=%s' % (album.name)
+	response['Content-Disposition'] = 'attachment; filename=%s.zip' % (album.name)
 	response['Content-Type'] = 'application/octet-stream'
 	response['X-Accel-Redirect'] = '%s' % (z_path, )	
 	return response
